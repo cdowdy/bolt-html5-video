@@ -109,4 +109,44 @@ class Html5VideoExtension extends SimpleExtension
         return $class;
     }
 
+
+    function getOptions( $config )
+    {
+        $confg = $this->getConfig();
+        $configName = $this->getConfigName($config);
+        $cdn = $confg[ $configName ][ 'use_cdn' ];
+        $videoID = $confg[ $configName ]['video_id'];
+        $saveData = $confg[ $configName ]['save_data'];
+
+        $attributes = $confg[ $configName ]['attributes'];
+        $preload = $confg[ $configName ]['preload'];
+        $widthHeight = $confg[ $configName ]['width_height'];
+        $poster = $confg[ $configName ]['video_poster'];
+        $mediaFragment = $confg[ $configName ]['media_fragment'];
+        $tracks = $confg[ $configName ]['tracks'];
+
+
+        $class = $this->getHTMLClass($configName);
+        $multiple_source = $confg[$configName]['multiple_source'];
+
+
+        $defaults = [
+            'use_cdn' => $cdn,
+            'video_id' => $videoID,
+            'class' => $class,
+            'multiple_source' => $multiple_source,
+            'save_data' => $saveData,
+            'attributes' => $attributes,
+            'preload' => $preload,
+            'width_height' => $widthHeight,
+            'video_poster' => $poster,
+            'media_fragment' => $mediaFragment,
+            'tracks' => $tracks
+        ];
+
+//        $defOptions = array_merge($defaults, $options);
+
+        return $defaults;
+    }
+
 }
