@@ -56,9 +56,40 @@ class Html5VideoExtension extends SimpleExtension
      *
      * @return string
      */
-    public function html5video()
+    public function html5video($file, $name, array $options = array() )
     {
+
+        // get the config file name if using one. otherwise its 'default'
+        $configName = $this->getConfigName($name);
+
+        // check for config settings
+        $defaultOptions = $this->getOptions($configName);
+
+        $mergedOptions = array_merge($defaultOptions, $options);
+
+
+        $attributes = $this->combineOptions($configName, $options, 'attributes');
+
+        $poster = $mergedOptions['video_poster'];
+        $isCDN = $mergedOptions['use_cdn'];
+
+        // test for protocol on URLs
+        $urlProtocol = $this->prefixCDNURL($file);
+
+//        if ($isCDN) {
+//            $video = $this->prefixCDNURL($file);
+//        } else {
+        $video = $this->videoFile($file, $isCDN);
+//        }
+
         $context = [
+            'videoSrc' => $video,
+            'config' => $configName,
+            'defaults' => $defaultOptions,
+            'poster' => $poster,
+            'attributes' => $attributes,
+            'is_cdn' => $isCDN,
+            'protocol' => $urlProtocol
         ];
 
         return $this->renderTemplate('video.twig', $context);
@@ -126,7 +157,8 @@ class Html5VideoExtension extends SimpleExtension
         $attributes = $confg[ $configName ]['attributes'];
         $preload = $confg[ $configName ]['preload'];
         $widthHeight = $confg[ $configName ]['width_height'];
-        $poster = $confg[ $configName ]['video_poster'];
+//        $poster = $confg[ $configName ]['video_poster'];
+        $poster = $this->getPoster($configName);
         $mediaFragment = $confg[ $configName ]['media_fragment'];
         $tracks = $confg[ $configName ]['tracks'];
 
@@ -190,8 +222,9 @@ class Html5VideoExtension extends SimpleExtension
 
     public function prefixCDNURL( $url )
     {
+        $app = $this->getContainer();
         $config = $this->getConfig();
-        $enforceSSL = $this->app['config']->get('general/enforce_ssl');
+        $enforceSSL = $app['config']->get('general/enforce_ssl');
         $cdnProtocol = parse_url($config[ 'cdn_url' ], PHP_URL_SCHEME);
 
         if (!$cdnProtocol && $enforceSSL ) {
@@ -214,6 +247,7 @@ class Html5VideoExtension extends SimpleExtension
     // filepath of hte site
     public function videoFile($filename, $options)
     {
+        $app = $this->getContainer();
         if ($options == 'use_cdn' ) {
 
             $video = $this->prefixCDNURL($filename);
@@ -225,7 +259,7 @@ class Html5VideoExtension extends SimpleExtension
 
             $video = sprintf(
                 '%sfiles/%s',
-                $this->app[ 'paths' ][ 'root' ],
+                $app[ 'paths' ][ 'root' ],
                 Lib::safeFilename($filename)
             );
         }
@@ -241,5 +275,30 @@ class Html5VideoExtension extends SimpleExtension
         $url = parse_url(trim($string));
 
         return trim($url['host'] ? $url['host'] : array_shift(explode('/', $url['path'], 2)));
+    }
+
+    // build the poster string
+
+    protected function getPoster($config)
+    {
+        $app = $this->getContainer();
+        $cfg = $this->getConfig();
+        $configName = $this->getConfigName($config);
+        $poster = $cfg[ $configName ]['video_poster'];
+
+        $extPath = $app['resources']->getUrl('extensions');
+
+        $vendor = 'vendor/cdowdy/';
+        $extName = 'bolt-html5-video/';
+
+        $posterPath = $extPath . $vendor . $extName . 'img/poster-test.svg';
+
+        if(!$poster) {
+            $defaultPoster = $posterPath;
+        } else {
+            $defaultPoster = $poster;
+        }
+
+        return $defaultPoster;
     }
 }
