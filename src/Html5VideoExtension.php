@@ -8,6 +8,7 @@ use Bolt\Controller\Zone;
 use Bolt\Events\StorageEvent;
 use Bolt\Events\StorageEvents;
 use Bolt\Extension\SimpleExtension;
+use Bolt\Library as Lib;
 
 /**
  * Html5Video extension class.
@@ -205,5 +206,40 @@ class Html5VideoExtension extends SimpleExtension
             $url = $prefix . $url;
         }
         return $url;
+    }
+
+    // Get the video URL or relative path.
+    // If its a URL then we'll just pass it along
+    // if it isn't a URL then pass the filename to Bolt's "safefilename" function and attach it to the
+    // filepath of hte site
+    public function videoFile($filename, $options)
+    {
+        if ($options == 'use_cdn' ) {
+
+            $video = $this->prefixCDNURL($filename);
+
+        } else {
+            if (is_array($filename)) {
+                $filename = isset($filename[ 'filename' ]) ? $filename[ 'filename' ] : $filename[ 'file' ];
+            }
+
+            $video = sprintf(
+                '%sfiles/%s',
+                $this->app[ 'paths' ][ 'root' ],
+                Lib::safeFilename($filename)
+            );
+        }
+
+        return $video;
+    }
+
+
+    // since we can pass a CDN URL to our twig function in addition to
+    // the files from either {{ record.videoFile }} or from the files directory.. ie. 'site/files/video.webm'
+    // we'll get the host of the string(filename) if it exists.
+    public function getHost($string) {
+        $url = parse_url(trim($string));
+
+        return trim($url['host'] ? $url['host'] : array_shift(explode('/', $url['path'], 2)));
     }
 }
