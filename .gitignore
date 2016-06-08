@@ -4,3 +4,4 @@ composer.lock
 vendor/
 tests/tmp/
 
+/extensions/local/cdowdy/bolt-html5-video/config/config-dev.ym
