@@ -1,0 +1,65 @@
+# set CDN url if its set and the config option of "use_cdn" is true then use this path for the video
+cdn_url:
+
+
+# breakdown of options available to use:
+# * use_cdn: [true | false ] this defaults to false
+# * save_data: true | false check for the save-data client hint header and don't load videos unless the user wants to.
+# * video_id: gives the containing element an ID as a hook for styling :( or JavaScript :)
+# * class: CSS class
+# * attributes: [ 'autoplay', 'controls', 'muted', 'loop' ] # dont use autplay please :)
+# * preload: 'metadata' # options are metadata | auto | none
+# * width_height: [ 400, 400 ] # the width and height of the video element if you have one... optional
+# * multiple_source: use HTML5 source attributes to serve multiple sources ie. webm, mp4
+# * media_fragement: [ start_time, end_time ] to play a specific portion of the video see: http://www.html5rocks.com/en/tutorials/video/basics/#toc-markup
+
+
+# ================================================================================= #
+# Full Example
+# ================================================================================= #
+#default:
+#  use_cdn: true
+#  save_data: true
+#  video_id: blogVideo
+#  class: ['class-one']
+#  attributes: [ 'autoplay', 'controls', 'muted', 'loop' ]
+#  preload: 'metadata'
+#  width_height: [ 400, 400 ]
+#  multiple_source: true
+#  media_fragement: [10, 60 ]
+
+default:
+  use_cdn: false
+  save_data: false
+  video_poster: 'poster-test.svg' # if you want a poster image to load
+  attributes: [ 'controls']
+  preload: 'metadata'
+  width_height: [ 400, 400 ] # the width and height of the video element if you have one... optional
+  multiple_source: true
+  tracks:
+    en_subtitles:
+      type: 'subtitles'
+      srclang: 'en'
+      label: 'English'
+      src: 'file.vtt'
+      default: true
+    es_subtitles:
+      type: 'subtitles'
+      srclang: 'es'
+      label: 'Español'
+      src: 'file-es.vtt'
+    en_captions:
+      type: captions
+      src: 'captions.vtt'
+      srclang: 'en'
+
+
+
+#test:
+#  use_cdn: false
+#  video_id: blogVideo2
+#  class: ['class-two']
+#  multiple_source: true
+#  attributes:  # attributes to apply to the video container.
+#      autoplay: true
+#  save_data: true
