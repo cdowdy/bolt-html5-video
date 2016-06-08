@@ -87,4 +87,26 @@ class Html5VideoExtension extends SimpleExtension
         return $configName;
     }
 
+
+    /**
+     * @param $config
+     *
+     * @return mixed
+     */
+    protected function getHTMLClass($config)
+    {
+        $confg = $this->getConfig();
+        $configName = $this->getConfigName($config);
+        $htmlClass = $confg[ $configName ][ 'class' ];
+
+        $class = $confg[ 'default' ][ 'class' ];
+
+        // if a class array is in the config set the $class variable to the class array
+        if ( isset($htmlClass ) ) {
+            $class = $htmlClass;
+        }
+
+        return $class;
+    }
+
 }
