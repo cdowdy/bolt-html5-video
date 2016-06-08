@@ -19,16 +19,16 @@ class Html5VideoExtension extends SimpleExtension
     /**
      * {@inheritdoc}
      */
-    public function registerFields()
-    {
-        /*
-         * Custom Field Types
-         */
-
-        return [
-            new Field\HTML5VideoField(),
-        ];
-    }
+//    public function registerFields()
+//    {
+//        /*
+//         * Custom Field Types
+//         */
+//
+//        return [
+//            new Field\HTML5VideoField(),
+//        ];
+//    }
 
 
     /**
@@ -61,6 +61,30 @@ class Html5VideoExtension extends SimpleExtension
         ];
 
         return $this->renderTemplate('video.twig', $context);
+    }
+
+    /**
+     * @param $name
+     *
+     * @return string
+     *
+     * get the config name. If no name is passed in the twig function then use
+     * the default settings in our config file under defaults
+     */
+    function getConfigName($name)
+    {
+
+        if (empty($name)) {
+
+            $configName = 'default';
+
+        } else {
+
+            $configName = $name;
+
+        }
+
+        return $configName;
     }
 
 }
