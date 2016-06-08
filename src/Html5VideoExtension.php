@@ -110,6 +110,10 @@ class Html5VideoExtension extends SimpleExtension
     }
 
 
+    /**
+     * @param $config
+     * @return array
+     */
     function getOptions( $config )
     {
         $confg = $this->getConfig();
@@ -147,6 +151,26 @@ class Html5VideoExtension extends SimpleExtension
 //        $defOptions = array_merge($defaults, $options);
 
         return $defaults;
+    }
+
+
+    /**
+     * @param $config
+     * @param array $options
+     * @param $option
+     * @return array|mixed
+     */
+    public function combineOptions( $config, $options = array(), $option ) {
+        $configName = $this->getConfigName($config);
+        $defaultOptions = $this->getOptions($configName);
+
+        if ($options[$option]) {
+            $combined = array_merge($defaultOptions[ $option ], $options[ $option ]);
+        } else {
+            $combined = $defaultOptions[$option];
+        }
+
+        return $combined;
     }
 
 }
