@@ -72,21 +72,31 @@ class Html5VideoExtension extends SimpleExtension
 
         $poster = $mergedOptions['video_poster'];
         $isCDN = $mergedOptions['use_cdn'];
+        $preload = $mergedOptions['preload'];
+        $widthHeight = $mergedOptions['width_height'];
 
         // test for protocol on URLs
         $urlProtocol = $this->prefixCDNURL($file);
+        $confg = $this->getConfig();
 
-//        if ($isCDN) {
-//            $video = $this->prefixCDNURL($file);
-//        } else {
-        $video = $this->videoFile($file, $isCDN);
-//        }
+        $cdnURL = $confg['cdn_url'];
+
+        if ($isCDN) {
+
+//            $prefix = $this->prefixURL($cdnURL);
+            $video =  $this->cdnFile($file);
+
+        } else {
+            $video = $this->videoFile($file, $isCDN);
+        }
 
         $context = [
             'videoSrc' => $video,
             'config' => $configName,
             'defaults' => $defaultOptions,
             'poster' => $poster,
+            'preload' => $preload,
+            'widthHeight' => $widthHeight,
             'attributes' => $attributes,
             'is_cdn' => $isCDN,
             'protocol' => $urlProtocol
@@ -164,6 +174,7 @@ class Html5VideoExtension extends SimpleExtension
 
         $class = $this->getHTMLClass($configName);
         $multiple_source = $confg[$configName]['multiple_source'];
+        $videoTypes = $config[ $configName ]['video_types'];
 
 
         $defaults = [
@@ -171,6 +182,7 @@ class Html5VideoExtension extends SimpleExtension
             'video_id' => $videoID,
             'class' => $class,
             'multiple_source' => $multiple_source,
+            'video_types' => $videoTypes,
             'save_data' => $saveData,
             'attributes' => $attributes,
             'preload' => $preload,
@@ -247,11 +259,7 @@ class Html5VideoExtension extends SimpleExtension
     public function videoFile($filename, $options)
     {
         $app = $this->getContainer();
-        if ($options == 'use_cdn' ) {
 
-            $video = $this->prefixCDNURL($filename);
-
-        } else {
             if (is_array($filename)) {
                 $filename = isset($filename[ 'filename' ]) ? $filename[ 'filename' ] : $filename[ 'file' ];
             }
@@ -261,9 +269,39 @@ class Html5VideoExtension extends SimpleExtension
                 $app[ 'paths' ][ 'root' ],
                 Lib::safeFilename($filename)
             );
+//        }
+
+        return $video;
+    }
+
+    protected function cdnFile( $filename )
+    {
+        $app = $this->getContainer();
+        $confg = $this->getConfig();
+
+//        $useCDN = $options['use_cdn'];
+
+        $cdnURL = $confg['cdn_url'];
+        $cdnPrefix = $this->prefixCDNURL($cdnURL);
+
+        if ( $cdnURL ) {
+            $video = $cdnURL . $filename;
+        } else {
+            $video = $this->prefixCDNURL($filename);
         }
 
         return $video;
+    }
+
+    protected function multipleVids( $filename, $options )
+    {
+        $app = $this->getContainer();
+        $cdn = $options['use_cdn'];
+        $videoTypes = $options['video_types'];
+
+
+//        return $video;
+
     }
 
 
