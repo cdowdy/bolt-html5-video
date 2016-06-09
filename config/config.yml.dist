@@ -37,7 +37,7 @@ default:
   preload: 'metadata'
   width_height: [ 400, 400 ] # the width and height of the video element if you have one... optional
   multiple_source: true
-  video_types: []
+  video_types: [ 'webm', 'mp4' ]
   tracks:
     en_subtitles:
       type: 'subtitles'
