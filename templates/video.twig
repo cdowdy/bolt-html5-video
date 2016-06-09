@@ -1,0 +1,59 @@
+{# cdn file : https://pullzone1-corydowdywebdesi.netdna-ssl.com/assets/video/sw_critical_css-broke.mp4 #}
+
+{# =================== VIDEO ATTRIBUTES ============================================== #
+    gather video attributes like
+    * autolplay
+    * controls
+    * muted
+    * loop
+# ================================================================================ #}
+{% macro vidAttribs( attributes ) %}
+{% spaceless %}{% for attrib in attributes %} {{ attrib }} {% endfor %}{% endspaceless %}
+{% endmacro vidAttribs %}
+
+
+{# ==================== VIDEO POSTER ================================================ #
+    Macro for the video poster
+# ================================================================================ #}
+{% macro vidPoster( poster ) %}
+{% spaceless %}{% if poster %} poster="{{ poster }}"{% endif %}{% endspaceless %}
+{% endmacro vidPoster %}
+
+{# ==================== VIDEO PRELOAD ================================================ #
+    gather the preload options if present and create the sting
+# ================================================================================ #}
+{% macro vidPreload( preload ) %}
+{% spaceless %}{% if preload %}preload="{{ preload }}"{% endif %}{% endspaceless %}
+{% endmacro vidPreload %}
+
+{# ==================== VIDEO DIMENSIONS ============================================= #
+    get the width and height if set
+# ================================================================================ #}
+{% macro vidPreload( preload ) %}
+{% macro vidDimensions( widthHeight ) %}
+{% spaceless %}{% if widthHeight %} width="{{ widthHeight.0 }}" height="{{ widthHeight.1 }}"{% endif %}{% endspaceless %}
+{% endmacro vidDimensions %}
+
+   {#{% if widthHeight %}#}
+       {#{% for width, height in widthHeight %}#}
+           {#width="{{ width.0 }}" height="{{ height.1 }}"#}
+       {#{% endfor %}#}
+   {#{% endif %}#}
+
+{% import _self as attrib %}
+<video {{ attrib.vidAttribs(attributes) }} {{ attrib.vidPreload(preload) }} {{ attrib.vidPoster(poster) }} {{ attrib.vidDimensions(widthHeight) }}  >
+
+</video>
+
+{#{{ dump(poster) }}#}
+
+{#<h1>Video File(s)</h1>#}
+{#{{ videoSrc }}#}
+{#{{ dump(videoSrc) }}#}
+{#<hr>#}
+{#<h1>Video Attributes</h1>#}
+{#{% for key, value in widthHeight %}#}
+{#<p>Key: {{ key }}</p>#}
+    {#<p>Value: {{ value }}</p>#}
+{#{% endfor %}#}
+{#{{ dump(widthHeight) }}#}
