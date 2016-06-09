@@ -29,7 +29,7 @@
 {# ==================== VIDEO DIMENSIONS ============================================= #
     get the width and height if set
 # ================================================================================ #}
-{% macro vidPreload( preload ) %}
+
 {% macro vidDimensions( widthHeight ) %}
 {% spaceless %}{% if widthHeight %} width="{{ widthHeight.0 }}" height="{{ widthHeight.1 }}"{% endif %}{% endspaceless %}
 {% endmacro vidDimensions %}
@@ -44,16 +44,3 @@
 <video {{ attrib.vidAttribs(attributes) }} {{ attrib.vidPreload(preload) }} {{ attrib.vidPoster(poster) }} {{ attrib.vidDimensions(widthHeight) }}  >
 
 </video>
-
-{#{{ dump(poster) }}#}
-
-{#<h1>Video File(s)</h1>#}
-{#{{ videoSrc }}#}
-{#{{ dump(videoSrc) }}#}
-{#<hr>#}
-{#<h1>Video Attributes</h1>#}
-{#{% for key, value in widthHeight %}#}
-{#<p>Key: {{ key }}</p>#}
-    {#<p>Value: {{ value }}</p>#}
-{#{% endfor %}#}
-{#{{ dump(widthHeight) }}#}
