@@ -157,8 +157,7 @@ class Html5VideoExtension extends SimpleExtension
         $attributes = $confg[ $configName ]['attributes'];
         $preload = $confg[ $configName ]['preload'];
         $widthHeight = $confg[ $configName ]['width_height'];
-//        $poster = $confg[ $configName ]['video_poster'];
-        $poster = $this->getPoster($configName);
+        $poster = $confg[ $configName ]['video_poster'];
         $mediaFragment = $confg[ $configName ]['media_fragment'];
         $tracks = $confg[ $configName ]['tracks'];
 
@@ -277,28 +276,4 @@ class Html5VideoExtension extends SimpleExtension
         return trim($url['host'] ? $url['host'] : array_shift(explode('/', $url['path'], 2)));
     }
 
-    // build the poster string
-
-    protected function getPoster($config)
-    {
-        $app = $this->getContainer();
-        $cfg = $this->getConfig();
-        $configName = $this->getConfigName($config);
-        $poster = $cfg[ $configName ]['video_poster'];
-
-        $extPath = $app['resources']->getUrl('extensions');
-
-        $vendor = 'vendor/cdowdy/';
-        $extName = 'bolt-html5-video/';
-
-        $posterPath = $extPath . $vendor . $extName . 'img/poster-test.svg';
-
-        if(!$poster) {
-            $defaultPoster = $posterPath;
-        } else {
-            $defaultPoster = $poster;
-        }
-
-        return $defaultPoster;
-    }
 }
