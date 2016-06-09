@@ -11,6 +11,7 @@ cdn_url:
 # * preload: 'metadata' # options are metadata | auto | none
 # * width_height: [ 400, 400 ] # the width and height of the video element if you have one... optional
 # * multiple_source: use HTML5 source attributes to serve multiple sources ie. webm, mp4
+# * video_types: [ 'webm', 'mp4', 'ogg'] which types you want to use. webm mp4 should cover most modern browsers Only needed if multiple_source is true
 # * media_fragement: [ start_time, end_time ] to play a specific portion of the video see: http://www.html5rocks.com/en/tutorials/video/basics/#toc-markup
 
 
@@ -31,11 +32,12 @@ cdn_url:
 default:
   use_cdn: false
   save_data: false
-  video_poster: 'poster-test.svg' # if you want a poster image to load
+  video_poster: 'extensions/vendor/cdowdy/bolt-html5-video/img/poster-test.svg' # if you want a poster image to load
   attributes: [ 'controls']
   preload: 'metadata'
   width_height: [ 400, 400 ] # the width and height of the video element if you have one... optional
   multiple_source: true
+  video_types: []
   tracks:
     en_subtitles:
       type: 'subtitles'
