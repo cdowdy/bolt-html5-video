@@ -75,6 +75,9 @@ class Html5VideoExtension extends SimpleExtension
         $preload = $mergedOptions['preload'];
         $widthHeight = $mergedOptions['width_height'];
 
+        // get tracks if present
+        $tracks = $mergedOptions['tracks'];
+
         // test for protocol on URLs
         $urlProtocol = $this->prefixCDNURL($file);
         $confg = $this->getConfig();
@@ -92,14 +95,12 @@ class Html5VideoExtension extends SimpleExtension
 
         $context = [
             'videoSrc' => $video,
-            'config' => $configName,
-            'defaults' => $defaultOptions,
             'poster' => $poster,
             'preload' => $preload,
             'widthHeight' => $widthHeight,
             'attributes' => $attributes,
             'is_cdn' => $isCDN,
-            'protocol' => $urlProtocol
+            'tracks' => $tracks
         ];
 
         return $this->renderTemplate('video.twig', $context);
@@ -169,8 +170,9 @@ class Html5VideoExtension extends SimpleExtension
         $widthHeight = $confg[ $configName ]['width_height'];
         $poster = $confg[ $configName ]['video_poster'];
         $mediaFragment = $confg[ $configName ]['media_fragment'];
-        $tracks = $confg[ $configName ]['tracks'];
+//        $tracks = $confg[ $configName ]['tracks'];
 
+        $tracks = $this->vidTracks( $configName );
 
         $class = $this->getHTMLClass($configName);
         $multiple_source = $confg[$configName]['multiple_source'];
@@ -287,6 +289,7 @@ class Html5VideoExtension extends SimpleExtension
         if ( $cdnURL ) {
             $video = $cdnURL . $filename;
         } else {
+
             $video = $this->prefixCDNURL($filename);
         }
 
@@ -302,6 +305,16 @@ class Html5VideoExtension extends SimpleExtension
 
 //        return $video;
 
+    }
+
+    protected function vidTracks( $cfg )
+    {
+        $config = $this->getConfig();
+        $configName = $this->getConfigName( $cfg );
+
+        $trackConfig = $config[ $configName ]['tracks'];
+
+        return $trackConfig;
     }
 
 
