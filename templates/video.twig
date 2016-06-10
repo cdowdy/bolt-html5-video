@@ -55,6 +55,8 @@
 {{ build.vidAttribs(attributes) }} {{ build.vidPreload(preload) }} {{ build.vidPoster(poster) }} {{ build.singleVid(videoSrc, multiSrc) }} {{ build.vidDimensions(widthHeight) }}
 {% endmacro %}
 
+
+
 {# ==================== VIDEO Tracks ================================================= #
     get the video subtitles and captions
 # ================================================================================ #}
@@ -69,7 +71,15 @@
 
 
 {% import _self as attrib %}
-{#<video {{ attrib.vidAttribs(attributes) }} {{ attrib.vidPreload(preload) }} {{ attrib.vidPoster(poster) }} {{ attrib.vidDimensions(widthHeight) }}  >#}
+
+{#  =================================================================================
+ #          VIDEO TAG BUILDING UP IN HERE UP IN HERE
+ #          YALL GONE MAKE ME BUILD A VIDEO UP IN HERE UP IN HERE
+ #          YALL GONE MAKE ME GO ALL OUT UP IN HERE UP IN HERE
+ #          YALL GONE MAKE ME ADD SOME TRACKS UP IN HERE UP IN HERE
+ #          YALL GONE MAKE ME ADD SOME SOURCES UP IN HERE UP IN HERE
+ #
+ # =================================================================================#}
 <video {% spaceless %} {{ attrib.attribBuild( attributes, preload, poster, widthHeight, videoSrc, multiSrc ) }}{% endspaceless %}>
 {{ attrib.vidTracks(tracks) }}
 </video>
