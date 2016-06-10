@@ -12,6 +12,16 @@
 {% endmacro vidAttribs %}
 
 
+{# ==================== VIDEO SINGLE SOURCE =========================================== #
+    Macro for the single source video
+# ================================================================================ #}
+{% macro singleVid( videoSrc, multiSrc ) %}
+{% if multiSrc %}
+{% else %}
+    src="{{ videoSrc }}"
+{% endif %}
+{% endmacro singleVid %}
+
 {# ==================== VIDEO POSTER ================================================ #
     Macro for the video poster
 # ================================================================================ #}
@@ -34,13 +44,34 @@
 {% spaceless %}{% if widthHeight %} width="{{ widthHeight.0 }}" height="{{ widthHeight.1 }}"{% endif %}{% endspaceless %}
 {% endmacro vidDimensions %}
 
-   {#{% if widthHeight %}#}
-       {#{% for width, height in widthHeight %}#}
-           {#width="{{ width.0 }}" height="{{ height.1 }}"#}
-       {#{% endfor %}#}
-   {#{% endif %}#}
+
+
+{# ==================== VIDEO ATTRIBUTES AND SINGLE SOURCE BUILD ========================= #
+    Combine the video attributes ( macro vidAttribs ), video preload ( macro vidPreload), video dimenensions
+    (macro vidDimensions) and the single source video file
+# ================================================================================ #}
+{% macro attribBuild( attributes, preload, poster, widthHeight, videoSrc, multiSrc ) %}
+    {% import _self as build %}
+{{ build.vidAttribs(attributes) }} {{ build.vidPreload(preload) }} {{ build.vidPoster(poster) }} {{ build.singleVid(videoSrc, multiSrc) }} {{ build.vidDimensions(widthHeight) }}
+{% endmacro %}
+
+{# ==================== VIDEO Tracks ================================================= #
+    get the video subtitles and captions
+# ================================================================================ #}
+{% macro vidTracks( tracks ) %}
+{% if tracks %}
+    {% for key, value in tracks %}
+<track label="{{ value.label }}" kind="{{ value.kind }}" srclang="{{ value.srclang }}" src="{{ value.src }}" {% if value.default %} default {% endif %}>
+    {% endfor %}
+{% endif %}
+{% endmacro vidTracks %}
+
+
 
 {% import _self as attrib %}
-<video {{ attrib.vidAttribs(attributes) }} {{ attrib.vidPreload(preload) }} {{ attrib.vidPoster(poster) }} {{ attrib.vidDimensions(widthHeight) }}  >
-
+{#<video {{ attrib.vidAttribs(attributes) }} {{ attrib.vidPreload(preload) }} {{ attrib.vidPoster(poster) }} {{ attrib.vidDimensions(widthHeight) }}  >#}
+<video {% spaceless %} {{ attrib.attribBuild( attributes, preload, poster, widthHeight, videoSrc, multiSrc ) }}{% endspaceless %}>
+{{ attrib.vidTracks(tracks) }}
 </video>
+
+<p>Multiple Source: {{ multiSrc }}</p>
