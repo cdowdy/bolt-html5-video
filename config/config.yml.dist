@@ -40,18 +40,18 @@ default:
   video_types: [ 'webm', 'mp4' ]
   tracks:
     en_subtitles:
-      type: 'subtitles'
+      kind: 'subtitles'
       srclang: 'en'
       label: 'English'
       src: 'file.vtt'
       default: true
     es_subtitles:
-      type: 'subtitles'
+      kind: 'subtitles'
       srclang: 'es'
       label: 'Español'
       src: 'file-es.vtt'
     en_captions:
-      type: captions
+      kind: captions
       src: 'captions.vtt'
       srclang: 'en'
 
