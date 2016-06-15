@@ -135,8 +135,3 @@
 <video {% spaceless %} {{ attrib.attribBuild( attributes, preload, poster, widthHeight, singleSrc, multiSrc, fragment ) }}{% endspaceless %}>
 {{ attrib.bodyBuild(multiVid, multiSrc, tracks, fragment) }}
 </video>
-
-<p>Media Fragment</p>
-{% if fragment %}
-<p>#t={% spaceless %}{% for frag in fragment %}{{ frag }}{% if not loop.last  %},{% endif %}{% endfor %}{% endspaceless %}</p>
-{% endif %}
