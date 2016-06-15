@@ -167,7 +167,7 @@ cdn_url: 'https://awesome-cdn.com/path/to/videos/'
 __use_cdn__:
 If you want to use a CDN. Defaults to false - or no you don't want to.
 
-```yaml:
+```yaml
 use_cdn:  [true | false ]
 ```
 
