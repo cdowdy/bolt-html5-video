@@ -17,10 +17,11 @@
 {# ==================== VIDEO SINGLE SOURCE =========================================== #
     Macro for the single source video
 # ================================================================================ #}
-{% macro singleVid( singleSrc, multiSrc ) %}
+{% macro singleVid( singleSrc, multiSrc, fragment ) %}
+    {% import _self as mf %}
 {% if multiSrc %}
 {% else %}
-    src="{{ singleSrc }}"
+    src="{{ singleSrc }}{{ mf.mFrag(fragment) }}"
 {% endif %}
 {% endmacro singleVid %}
 
@@ -97,9 +98,9 @@
     Combine the video attributes ( macro vidAttribs ), video preload ( macro vidPreload), video dimenensions
     (macro vidDimensions) and the single source video file
 # ================================================================================ #}
-{% macro attribBuild( attributes, preload, poster, widthHeight, singleSrc, multiSrc ) %}
+{% macro attribBuild( attributes, preload, poster, widthHeight, singleSrc, multiSrc, fragment ) %}
     {% import _self as build %}
-{{ build.vidAttribs(attributes) }} {{ build.vidPreload(preload) }} {{ build.vidPoster(poster) }} {{ build.singleVid(singleSrc, multiSrc) }} {{ build.vidDimensions(widthHeight) }}
+{{ build.vidAttribs(attributes) }} {{ build.vidPreload(preload) }} {{ build.vidPoster(poster) }} {{ build.singleVid(singleSrc, multiSrc, fragment) }} {{ build.vidDimensions(widthHeight) }}
 {% endmacro attribBuild %}
 
 
@@ -131,7 +132,7 @@
  #          YALL GONE MAKE ME ADD SOME SOURCES UP IN HERE UP IN HERE
  #
  # =================================================================================#}
-<video {% spaceless %} {{ attrib.attribBuild( attributes, preload, poster, widthHeight, singleSrc, multiSrc ) }}{% endspaceless %}>
+<video {% spaceless %} {{ attrib.attribBuild( attributes, preload, poster, widthHeight, singleSrc, multiSrc, fragment ) }}{% endspaceless %}>
 {{ attrib.bodyBuild(multiVid, multiSrc, tracks, fragment) }}
 </video>
 
