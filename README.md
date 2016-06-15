@@ -113,6 +113,44 @@ This will produce in the rendered HTML
 </video>
 ```
 
+## Adding Tracks and Subtitles
+
+You add subtitles and tracks to your videos by adding a section to your named config titled *tracks*
+
+```yaml
+blogVideos:
+  # other settings here
+  tracks:
+   en_subtitles:
+     kind: 'subtitles'
+     srclang: 'en'
+     label: 'English subtitles'
+     src: '/theme/base-2016/your-video-subtitles.vtt'
+     default: true
+   es_subtitles:
+      kind: 'subtitles'
+      srclang: 'es'
+      label: 'Español subtitles'
+      src: '/theme/base-2016/your-video-subtitles-es.vtt'
+   en_captions:
+      kind: 'captions'
+      srclang: 'en'
+      label: 'English Captions'
+      src: '/theme/base-2016/captions.vtt'
+```
+
+This will give you in your rendered page:
+
+```html
+<video controls preload="metadata" poster="/path/to/poser.png" width="400" height="400">
+  <source src="/files/your-video.webm" type="video/webm" >
+  <source src="/files/your-video.mp4" type="video/mp4" >
+  <track label="English subtitles" kind="subtitles" srclang="en" src="/theme/base-2016/your-video-subtitles.vtt"  default >
+  <track label="Español subtitles" kind="subtitles" srclang="es" src="/theme/base-2016/your-video-subtitles-es.vtt" >
+  <track label="English Captions" kind="captions" srclang="en" src="/theme/base-2016/captions.vtt" >
+</video>
+```
+
 
 
 ## Advanced Usage
