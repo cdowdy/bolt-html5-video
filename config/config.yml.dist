@@ -43,18 +43,18 @@ default:
       kind: 'subtitles'
       srclang: 'en'
       label: 'English subtitles'
-      src: 'file.vtt'
+      src: '/theme/base-2016/file.vtt'
       default: true
     es_subtitles:
       kind: 'subtitles'
       srclang: 'es'
       label: 'Español subtitles'
-      src: 'file-es.vtt'
+      src: '/theme/base-2016/file-es.vtt'
     en_captions:
       kind: 'captions'
       srclang: 'en'
       label: 'English Captions'
-      src: 'captions.vtt'
+      src: '/theme/base-2016/captions.vtt'
 
 
 
