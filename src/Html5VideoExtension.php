@@ -74,33 +74,40 @@ class Html5VideoExtension extends SimpleExtension
         $isCDN = $mergedOptions['use_cdn'];
         $preload = $mergedOptions['preload'];
         $widthHeight = $mergedOptions['width_height'];
+        $videoTypes = $mergedOptions['video_types'];
+        $multipleSource = $mergedOptions['multiple_source'];
 
         // get tracks if present
         $tracks = $mergedOptions['tracks'];
 
-        // test for protocol on URLs
-        $urlProtocol = $this->prefixCDNURL($file);
-        $confg = $this->getConfig();
 
-        $cdnURL = $confg['cdn_url'];
+//        if ($isCDN) {
+//            $singleVid =  $this->cdnFile($file);
+//        } else {
+//            $singleVid = $this->videoFile($file);
+//        }
 
-        if ($isCDN) {
 
-//            $prefix = $this->prefixURL($cdnURL);
-            $video =  $this->cdnFile($file);
-
+        if ($multipleSource) {
+            $multiVideo = $this->multipleVids($file, $isCDN, $multipleSource, $videoTypes );
         } else {
-            $video = $this->videoFile($file, $isCDN);
+            $singleVid = $this->videoFile( $file, $isCDN );
         }
 
+        $config = $this->getConfig();
+
+
         $context = [
-            'videoSrc' => $video,
+            'singleSrc' => $singleVid,
             'poster' => $poster,
             'preload' => $preload,
             'widthHeight' => $widthHeight,
             'attributes' => $attributes,
             'is_cdn' => $isCDN,
-            'tracks' => $tracks
+            'tracks' => $tracks,
+
+            'multiSrc' => $multipleSource,
+            'multiVid' => $multiVideo
         ];
 
         return $this->renderTemplate('video.twig', $context);
@@ -159,25 +166,24 @@ class Html5VideoExtension extends SimpleExtension
      */
     function getOptions( $config )
     {
-        $confg = $this->getConfig();
+        $cfg = $this->getConfig();
         $configName = $this->getConfigName($config);
-        $cdn = $confg[ $configName ][ 'use_cdn' ];
-        $videoID = $confg[ $configName ]['video_id'];
-        $saveData = $confg[ $configName ]['save_data'];
+        $cdn = $cfg[ $configName ][ 'use_cdn' ];
+        $videoID = $cfg[ $configName ]['video_id'];
+        $saveData = $cfg[ $configName ]['save_data'];
 
-        $attributes = $confg[ $configName ]['attributes'];
-        $preload = $confg[ $configName ]['preload'];
-        $widthHeight = $confg[ $configName ]['width_height'];
-        $poster = $confg[ $configName ]['video_poster'];
-        $mediaFragment = $confg[ $configName ]['media_fragment'];
-//        $tracks = $confg[ $configName ]['tracks'];
+        $attributes = $cfg[ $configName ]['attributes'];
+        $preload = $cfg[ $configName ]['preload'];
+        $widthHeight = $cfg[ $configName ]['width_height'];
+        $poster = $cfg[ $configName ]['video_poster'];
+        $mediaFragment = $cfg[ $configName ]['media_fragment'];
 
         $tracks = $this->vidTracks( $configName );
 
         $class = $this->getHTMLClass($configName);
-        $multiple_source = $confg[$configName]['multiple_source'];
-        $videoTypes = $config[ $configName ]['video_types'];
+        $multiple_source = $cfg[$configName]['multiple_source'];
 
+        $videoTypes = $cfg[ $configName ]['video_types'];
 
         $defaults = [
             'use_cdn' => $cdn,
@@ -258,27 +264,29 @@ class Html5VideoExtension extends SimpleExtension
     // If its a URL then we'll just pass it along
     // if it isn't a URL then pass the filename to Bolt's "safefilename" function and attach it to the
     // filepath of hte site
-    public function videoFile($filename, $options)
+    public function videoFile($filename, $cdn)
     {
         $app = $this->getContainer();
 
-            if (is_array($filename)) {
-                $filename = isset($filename[ 'filename' ]) ? $filename[ 'filename' ] : $filename[ 'file' ];
-            }
+        if (is_array($filename)) {
+            $filename = isset($filename['filename']) ? $filename['filename'] : $filename['file'];
+        }
 
+        if ($cdn) {
+            $video = $this->cdnFile($filename);
+        } else {
             $video = sprintf(
                 '%sfiles/%s',
-                $app[ 'paths' ][ 'root' ],
+                $app['paths']['root'],
                 Lib::safeFilename($filename)
             );
-//        }
+        }
 
         return $video;
     }
 
-    protected function cdnFile( $filename )
+    protected function cdnFile($filename)
     {
-        $app = $this->getContainer();
         $confg = $this->getConfig();
 
 //        $useCDN = $options['use_cdn'];
@@ -286,7 +294,7 @@ class Html5VideoExtension extends SimpleExtension
         $cdnURL = $confg['cdn_url'];
         $cdnPrefix = $this->prefixCDNURL($cdnURL);
 
-        if ( $cdnURL ) {
+        if ($cdnURL) {
             $video = $cdnURL . $filename;
         } else {
 
@@ -296,14 +304,30 @@ class Html5VideoExtension extends SimpleExtension
         return $video;
     }
 
-    protected function multipleVids( $filename, $options )
+    protected function multipleVids($filename, $isCDN, $msrc, $types)
     {
-        $app = $this->getContainer();
-        $cdn = $options['use_cdn'];
-        $videoTypes = $options['video_types'];
+
+        $fileInfo = pathinfo($this->cdnFile($filename));
+        $singlePath = pathinfo($this->videoFile($filename));
+
+        $multiVideo = [];
+
+        if ($msrc && $isCDN) {
+            foreach ($types as $type => $value) {
+                $multiVideo[] .= $fileInfo['dirname'] . '/' . $fileInfo['filename'] . '.' . $value;
+                $multiVideo[] .= $value;
+            }
+        }
 
 
-//        return $video;
+        if ($msrc && !$isCDN) {
+            foreach ($types as $type => $value) {
+                $multiVideo[] .= $singlePath['dirname'] . '/' . $singlePath['filename'] . '.' . $value;
+                $multiVideo[] .= $value;
+            }
+        }
+
+        return $multiVideo;
 
     }
 
