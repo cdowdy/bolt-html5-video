@@ -69,5 +69,49 @@ blogVideos:
   video_types: [ 'webm', 'mp4' ]
 ```
 
+In the template file you are using a video use this extensions twig tag along with your named config like so:
+
+```twig
+{{ html5video(record.video, 'blogVideos' ) }}
+```
+
+## Advanced Usage
+You can over-ride default config settings on a per usage basis in your templates.
+
+Settings that can be currently over-ridden are:
+
+* video_poster
+* use_cdn
+* preload
+* width_height
+* media_fragment
+* multiple_source
+
+To over-ride these in a template place the tag in the template along with the named config:
+
+```twig
+{{ html5video(record.video, 'blogVideos' ) }}
+```
+
+After your named config place a comma then your custom config setting(s).
+
+```twig
+{{ html5video(record.video, 'blogVideos', { preload: [ 'auto' ] } )  }}
+```
+
+For multiple over-rides I would suggest placing them on a new line like so:
+
+```twig
+{{ html5video(record.video, 'blogVideos', {
+  video_poster: 'path/to/custom/poster.png',
+  use_cdn: true,
+  preload: [ 'auto' ]
+  width_height: [ 600, 400 ],
+  media_fragment: [ 0, 60 ],
+  multiple_source: false
+  } )
+}}
+```
+
 
 Has options for ```tracks``` and WebVTT files for subtitles http://html5doctor.com/video-subtitling-and-webvtt/#contents
