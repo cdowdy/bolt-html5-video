@@ -74,6 +74,7 @@ class Html5VideoExtension extends SimpleExtension
         $isCDN = $mergedOptions['use_cdn'];
         $preload = $mergedOptions['preload'];
         $widthHeight = $mergedOptions['width_height'];
+        $mediaFragment = $mergedOptions['media_fragment'];
         $videoTypes = $mergedOptions['video_types'];
         $multipleSource = $mergedOptions['multiple_source'];
 
@@ -107,7 +108,8 @@ class Html5VideoExtension extends SimpleExtension
             'tracks' => $tracks,
 
             'multiSrc' => $multipleSource,
-            'multiVid' => $multiVideo
+            'multiVid' => $multiVideo,
+            'fragment' => $mediaFragment
         ];
 
         return $this->renderTemplate('video.twig', $context);
@@ -176,7 +178,7 @@ class Html5VideoExtension extends SimpleExtension
         $preload = $cfg[ $configName ]['preload'];
         $widthHeight = $cfg[ $configName ]['width_height'];
         $poster = $cfg[ $configName ]['video_poster'];
-        $mediaFragment = $cfg[ $configName ]['media_fragment'];
+        $mediaFragment = $this->mediaFragment( $configName );
 
         $tracks = $this->vidTracks( $configName );
 
@@ -304,7 +306,7 @@ class Html5VideoExtension extends SimpleExtension
         return $video;
     }
 
-    protected function multipleVids($filename, $isCDN, $msrc, $types)
+    protected function multipleVids($filename, $isCDN, $msrc, $types )
     {
 
         $fileInfo = pathinfo($this->cdnFile($filename));
@@ -314,7 +316,7 @@ class Html5VideoExtension extends SimpleExtension
 
         if ($msrc && $isCDN) {
             foreach ($types as $type => $value) {
-                $multiVideo += [ $fileInfo['dirname'] . '/' . $fileInfo['filename'] . '.' . $value  => $value ];
+                $multiVideo += [ $fileInfo['dirname'] . '/' . $fileInfo['filename'] . '.' . $value => $value ];
 //                $multiVideo[] .= $value;
             }
         }
@@ -322,7 +324,7 @@ class Html5VideoExtension extends SimpleExtension
 
         if ($msrc && !$isCDN) {
             foreach ($types as $type => $value) {
-                $multiVideo += [ $singlePath['dirname'] . '/' . $singlePath['filename'] . '.' . $value => $value ];
+                $multiVideo += [ $singlePath['dirname'] . '/' . $singlePath['filename'] . '.' . $value   => $value ];
 //                $multiVideo[] .= $value;
             }
         }
@@ -339,6 +341,16 @@ class Html5VideoExtension extends SimpleExtension
         $trackConfig = $config[ $configName ]['tracks'];
 
         return $trackConfig;
+    }
+
+    protected function mediaFragment( $cfg )
+    {
+        $config = $this->getConfig();
+        $configName = $this->getConfigName( $cfg );
+
+        $mediaFragment = $config[ $configName ]['media_fragment'];
+
+        return $mediaFragment;
     }
 
 
