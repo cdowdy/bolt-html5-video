@@ -34,8 +34,6 @@
     {% for video, type in multiVid %}
     <source src="{{ video }}" type="video/{{ type }}" >
     {% endfor %}
-        {% else %}
-        <p>something went wrong </p>
     {% endif %}
 {% endmacro multiVid %}
 
