@@ -154,4 +154,28 @@ For multiple over-rides I would suggest placing them on a new line like so:
 ```
 
 
+## Config Settings:
+
+__cdn_url__:
+set CDN url if its set and the config option of "use_cdn" is true then use this path for the video.
+example:
+
+```yaml
+cdn_url: 'https://awesome-cdn.com/path/to/videos/'
+```
+
+__use_cdn__:
+If you want to use a CDN. Defaults to false - or no you don't want to.
+
+```yaml:
+use_cdn:  [true | false ]
+```
+
+If the above two are set then you can use just the filename in your templates to get the full path to the video. If there is no ``cdn_url`` set and ``use_cdn`` is true then you need to put the full url in your template.
+EX:
+
+```twig
+{{ html5video( 'https://your-cdn.com/path/to/videos/example.webm' ) }}
+```
+
 Has options for ```tracks``` and WebVTT files for subtitles http://html5doctor.com/video-subtitling-and-webvtt/#contents
