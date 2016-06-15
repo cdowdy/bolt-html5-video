@@ -314,16 +314,16 @@ class Html5VideoExtension extends SimpleExtension
 
         if ($msrc && $isCDN) {
             foreach ($types as $type => $value) {
-                $multiVideo[] .= $fileInfo['dirname'] . '/' . $fileInfo['filename'] . '.' . $value;
-                $multiVideo[] .= $value;
+                $multiVideo += [ $fileInfo['dirname'] . '/' . $fileInfo['filename'] . '.' . $value  => $value ];
+//                $multiVideo[] .= $value;
             }
         }
 
 
         if ($msrc && !$isCDN) {
             foreach ($types as $type => $value) {
-                $multiVideo[] .= $singlePath['dirname'] . '/' . $singlePath['filename'] . '.' . $value;
-                $multiVideo[] .= $value;
+                $multiVideo += [ $singlePath['dirname'] . '/' . $singlePath['filename'] . '.' . $value => $value ];
+//                $multiVideo[] .= $value;
             }
         }
 
