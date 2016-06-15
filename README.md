@@ -75,6 +75,46 @@ In the template file you are using a video use this extensions twig tag along wi
 {{ html5video(record.video, 'blogVideos' ) }}
 ```
 
+## Using Your Own CDN
+
+There is two (2) ways to use a CDN. The first is to add your CDN URL to the extensions config setting of ``cdn_url``
+
+```yaml
+cdn_url: https://your-cdn.com/path/to/files/
+```
+
+Then in your templates where you want the video use the file name:
+
+```twig
+{{ html5video( 'your-file.webm' ) }}
+```
+
+This will produce in the rendered HTML
+
+```html
+<video controls preload="metadata">
+  <source src="https://your-cdn.com/path/to/files/your-file.webm" type="video/webm" >
+  <source src="https://your-cdn.com/path/to/files/your-file.mp4" type="video/mp4" >
+</video>
+```
+
+The second way to do this is leave the ``cdn_url`` setting empty and place the full URL to your video in the tag:
+
+```twig
+{{ html5video( 'https://your-cdn.com/path/to/videos/second-cdn-example.webm' ) }}
+```
+
+This will produce in the rendered HTML
+
+```html
+<video controls preload="metadata">
+  <source src="https://your-cdn.com/path/to/videos/second-cdn-example.webm" type="video/webm" >
+  <source src="https://your-cdn.com/path/to/videos/second-cdn-example.mp4" type="video/mp4" >
+</video>
+```
+
+
+
 ## Advanced Usage
 You can over-ride default config settings on a per usage basis in your templates.
 
