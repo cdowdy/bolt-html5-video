@@ -105,7 +105,7 @@ For multiple over-rides I would suggest placing them on a new line like so:
 {{ html5video(record.video, 'blogVideos', {
   video_poster: 'path/to/custom/poster.png',
   use_cdn: true,
-  preload: [ 'auto' ]
+  preload: 'auto'
   width_height: [ 600, 400 ],
   media_fragment: [ 0, 60 ],
   multiple_source: false
