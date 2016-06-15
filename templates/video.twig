@@ -29,10 +29,11 @@
 {# ==================== VIDEO MULTIPLE SOURCE ========================================= #
     Macro for multiple source videos
 # ================================================================================ #}
-{% macro multiVid( multiVid, multiSrc ) %}
+{% macro multiVid( multiVid, multiSrc, fragment ) %}
+    {% import _self as mediaFrag %}
     {% if multiSrc %}
     {% for video, type in multiVid %}
-    <source src="{{ video }}" type="video/{{ type }}" >
+    <source src="{{ video }}{{ mediaFrag.mFrag(fragment) }}" type="video/{{ type }}" >
     {% endfor %}
     {% endif %}
 {% endmacro multiVid %}
@@ -67,6 +68,18 @@
 
 
 
+{# ==================== VIDEO MEDIA FRAGMENT  ========================================= #
+    get the media fragments if they are set in the config or template
+# ================================================================================ #}
+{% macro mFrag( fragment ) %}
+{% if fragment %}
+#t={% spaceless %}{% for frag in fragment %}{{ frag }}{% if not loop.last  %},{% endif %}{% endfor %}{% endspaceless %}
+{% endif %}
+{% endmacro mFrag %}
+
+
+
+
 {# ==================== VIDEO Tracks ================================================= #
     get the video subtitles and captions
 # ================================================================================ #}
@@ -97,9 +110,9 @@
  # Build the body of the video tag. Bring in tracks if they are there and source tags if there is multiple sources
  #
  # ================================================================================ #}
-{% macro bodyBuild( multiVid, multiSrc, tracks  ) %}
+{% macro bodyBuild( multiVid, multiSrc, tracks, fragment  ) %}
  {% import _self as body %}
-    {{ body.multiVid( multiVid, multiSrc ) }}
+    {{ body.multiVid( multiVid, multiSrc, fragment ) }}
     {{ body.vidTracks( tracks ) }}
 {% endmacro bodyBuild %}
 
@@ -119,5 +132,10 @@
  #
  # =================================================================================#}
 <video {% spaceless %} {{ attrib.attribBuild( attributes, preload, poster, widthHeight, singleSrc, multiSrc ) }}{% endspaceless %}>
-{{ attrib.bodyBuild(multiVid, multiSrc, tracks) }}
+{{ attrib.bodyBuild(multiVid, multiSrc, tracks, fragment) }}
 </video>
+
+<p>Media Fragment</p>
+{% if fragment %}
+<p>#t={% spaceless %}{% for frag in fragment %}{{ frag }}{% if not loop.last  %},{% endif %}{% endfor %}{% endspaceless %}</p>
+{% endif %}
