@@ -12,15 +12,34 @@
 {% endmacro vidAttribs %}
 
 
+
+
 {# ==================== VIDEO SINGLE SOURCE =========================================== #
     Macro for the single source video
 # ================================================================================ #}
-{% macro singleVid( videoSrc, multiSrc ) %}
+{% macro singleVid( singleSrc, multiSrc ) %}
 {% if multiSrc %}
 {% else %}
-    src="{{ videoSrc }}"
+    src="{{ singleSrc }}"
 {% endif %}
 {% endmacro singleVid %}
+
+
+
+{# ==================== VIDEO MULTIPLE SOURCE ========================================= #
+    Macro for multiple source videos
+# ================================================================================ #}
+{% macro multiVid( multiVid, multiSrc ) %}
+    {% if multiSrc %}
+    {% for video, type in multiVid %}
+    <source src="{{ video }}" type="video/{{ type }}" >
+    {% endfor %}
+        {% else %}
+        <p>something went wrong </p>
+    {% endif %}
+{% endmacro multiVid %}
+
+
 
 {# ==================== VIDEO POSTER ================================================ #
     Macro for the video poster
@@ -29,12 +48,16 @@
 {% spaceless %}{% if poster %} poster="{{ poster }}"{% endif %}{% endspaceless %}
 {% endmacro vidPoster %}
 
+
+
 {# ==================== VIDEO PRELOAD ================================================ #
     gather the preload options if present and create the sting
 # ================================================================================ #}
 {% macro vidPreload( preload ) %}
 {% spaceless %}{% if preload %}preload="{{ preload }}"{% endif %}{% endspaceless %}
 {% endmacro vidPreload %}
+
+
 
 {# ==================== VIDEO DIMENSIONS ============================================= #
     get the width and height if set
@@ -46,33 +69,50 @@
 
 
 
-{# ==================== VIDEO ATTRIBUTES AND SINGLE SOURCE BUILD ========================= #
-    Combine the video attributes ( macro vidAttribs ), video preload ( macro vidPreload), video dimenensions
-    (macro vidDimensions) and the single source video file
-# ================================================================================ #}
-{% macro attribBuild( attributes, preload, poster, widthHeight, videoSrc, multiSrc ) %}
-    {% import _self as build %}
-{{ build.vidAttribs(attributes) }} {{ build.vidPreload(preload) }} {{ build.vidPoster(poster) }} {{ build.singleVid(videoSrc, multiSrc) }} {{ build.vidDimensions(widthHeight) }}
-{% endmacro %}
-
-
-
 {# ==================== VIDEO Tracks ================================================= #
     get the video subtitles and captions
 # ================================================================================ #}
 {% macro vidTracks( tracks ) %}
-{% if tracks %}
-    {% for key, value in tracks %}
-<track label="{{ value.label }}" kind="{{ value.kind }}" srclang="{{ value.srclang }}" src="{{ value.src }}" {% if value.default %} default {% endif %}>
-    {% endfor %}
-{% endif %}
+    {% if tracks %}
+        {% for key, value in tracks %}
+            <track label="{{ value.label }}" kind="{{ value.kind }}" srclang="{{ value.srclang }}" src="{{ value.src }}" {% if value.default %} default {% endif %}>
+        {% endfor %}
+    {% endif %}
 {% endmacro vidTracks %}
+
+
+
+{# ==================== VIDEO ATTRIBUTES AND SINGLE SOURCE BUILD ========================= #
+    Combine the video attributes ( macro vidAttribs ), video preload ( macro vidPreload), video dimenensions
+    (macro vidDimensions) and the single source video file
+# ================================================================================ #}
+{% macro attribBuild( attributes, preload, poster, widthHeight, singleSrc, multiSrc ) %}
+    {% import _self as build %}
+{{ build.vidAttribs(attributes) }} {{ build.vidPreload(preload) }} {{ build.vidPoster(poster) }} {{ build.singleVid(singleSrc, multiSrc) }} {{ build.vidDimensions(widthHeight) }}
+{% endmacro attribBuild %}
+
+
+
+
+{# =================== VIDEO TAG BODY BUILDING ======================================== #
+ #
+ # Build the body of the video tag. Bring in tracks if they are there and source tags if there is multiple sources
+ #
+ # ================================================================================ #}
+{% macro bodyBuild( multiVid, multiSrc, tracks  ) %}
+ {% import _self as body %}
+    {{ body.multiVid( multiVid, multiSrc ) }}
+    {{ body.vidTracks( tracks ) }}
+{% endmacro bodyBuild %}
 
 
 
 {% import _self as attrib %}
 
 {#  =================================================================================
+ # ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+ # ==================================================================================
+ #
  #          VIDEO TAG BUILDING UP IN HERE UP IN HERE
  #          YALL GONE MAKE ME BUILD A VIDEO UP IN HERE UP IN HERE
  #          YALL GONE MAKE ME GO ALL OUT UP IN HERE UP IN HERE
@@ -80,8 +120,6 @@
  #          YALL GONE MAKE ME ADD SOME SOURCES UP IN HERE UP IN HERE
  #
  # =================================================================================#}
-<video {% spaceless %} {{ attrib.attribBuild( attributes, preload, poster, widthHeight, videoSrc, multiSrc ) }}{% endspaceless %}>
-{{ attrib.vidTracks(tracks) }}
+<video {% spaceless %} {{ attrib.attribBuild( attributes, preload, poster, widthHeight, singleSrc, multiSrc ) }}{% endspaceless %}>
+{{ attrib.bodyBuild(multiVid, multiSrc, tracks) }}
 </video>
-
-<p>Multiple Source: {{ multiSrc }}</p>
