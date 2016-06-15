@@ -45,14 +45,14 @@ and produce a video tag in your template.
 To start off you'll need to have a field in your contenttypes that accepts/uses video. While building this extension I used the ``file`` type.
 
  ```yaml
- # your contenttypes.yml file
- entries:
-     name: Entries
-     singular_name: Entry
-     fields:
-         # other fields here
-         video: # our video field to call in the template
-             type: file # the type of field we are using.
+# your contenttypes.yml file
+entries:
+  name: Entries
+  singular_name: Entry
+  fields:
+    # other fields here
+    video: # our video field to call in the template
+    type: file # the type of field we are using.
 ```
 
 Then create a config section in the extensions config file if you don't want to use the defaults. Give this a name. Settings left out of your named config will fall back to whatever is set in the 'default' config section.
