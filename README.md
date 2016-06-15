@@ -55,35 +55,18 @@ To start off you'll need to have a field in your contenttypes that accepts/uses 
              type: file # the type of field we are using.
 ```
 
-Then create a config section in the extensions config file if you don't want to use the defaults.
+Then create a config section in the extensions config file if you don't want to use the defaults. Give this a name. Settings left out of your named config will fall back to whatever is set in the 'default' config section.
 
 ```yaml
 blogVideos:
   use_cdn: false
   save_data: false
   video_poster: 'path/to/poster.png' # if you want a poster image to load
-  attributes: [ 'controls']
+  attributes: [ 'controls', 'muted' ]
   preload: 'metadata'
   width_height: [ 400, 400 ] # the width and height of the video element if you have one... optional
   multiple_source: true
   video_types: [ 'webm', 'mp4' ]
-  tracks:
-    en_subtitles:
-      kind: 'subtitles'
-      srclang: 'en'
-      label: 'English subtitles'
-      src: '/theme/base-2016/file.vtt'
-      default: true
-    es_subtitles:
-      kind: 'subtitles'
-      srclang: 'es'
-      label: 'Español subtitles'
-      src: '/theme/base-2016/file-es.vtt'
-    en_captions:
-      kind: 'captions'
-      srclang: 'en'
-      label: 'English Captions'
-      src: '/theme/base-2016/captions.vtt'
 ```
 
 
