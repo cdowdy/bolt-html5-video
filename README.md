@@ -12,6 +12,11 @@ Has current support for:
   * Tracks & subtitles
   * Media Fragments (currently only 't' or the time)
 
+Quick Navigation:
+
+* [ Quick Usage ](#quick-usage-with-defaults)
+* [Usage Walkthrough](#usage-walk-through)
+
 ## Quick Usage With Defaults
 
 Placing this twig tag in your template:
@@ -40,7 +45,7 @@ and produce a video tag in your template.
 </video>
 ```
 
-## Usage Walkthrough
+## Usage Walk-through
 
 To start off you'll need to have a field in your contenttypes that accepts/uses video. While building this extension I used the ``file`` type.
 
