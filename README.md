@@ -41,6 +41,8 @@ entries:
     # other fields here
     video: # our video field to call in the template
     type: file # the type of field we are using.
+    # or if uploading through the record creating / edit screen
+    #type: filelist
 ```
 
 
@@ -72,6 +74,12 @@ Now in your template ( example: record.twig ) place this tag with your named set
 ```twig
 {{ html5video(record.video, 'blogVideos' ) }}
 ```
+or for the filelist type:
+
+```twig
+{{ html5video(record.video.0, 'blogVideos' ) }}
+```
+
 
 
 ## Quick Usage With Defaults
