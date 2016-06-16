@@ -9,6 +9,7 @@ Quick Navigation:
 * [Using Your Own CDN](#using-your-own-cdn)
 * [Controlling Number of Video Sources](#controlling-video-sources)
 * [Adding Tracks and Subtitles](#adding-tracks-and-subtitles)
+* [Controlling Start and End Times](#controlling-start-and-end-times)
 * [Advanced Usage - over ride settings](#advanced-usage)
 
 Has current support for:
@@ -255,7 +256,7 @@ For a deeper dive into WebVTT have a look at the following links:
 * [HTML5 Doctor: Video Subtitling and WebVTT](http://html5doctor.com/video-subtitling-and-webvtt/)
 * [Mozilla Developer Network: Introduction to WebVTT](https://developer.mozilla.org/en-US/docs/Web/API/Web_Video_Text_Tracks_Format)
 
-## Controlling Start and End times
+## Controlling Start and End Times
 
 Through the ``media_fragment: [ ]`` config setting you can start the video or end the video at a specific time.
 
