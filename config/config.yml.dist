@@ -27,9 +27,19 @@ cdn_url:
 #  preload: 'metadata'
 #  width_height: [ 400, 400 ]
 #  multiple_source: true
-#  media_fragement: [10, 60 ]
+#  media_fragment: [10, 60 ]
 
 default:
+  use_cdn: false
+  save_data: false
+  attributes: [ 'controls']
+  preload: 'metadata'
+  multiple_source: true
+  video_types: [ 'webm', 'mp4' ]
+
+
+
+test:
   use_cdn: false
   save_data: false
   video_poster: 'extensions/vendor/cdowdy/bolt-html5-video/img/poster-test.svg' # if you want a poster image to load
@@ -55,14 +65,3 @@ default:
       srclang: 'en'
       label: 'English Captions'
       src: '/theme/base-2016/captions.vtt'
-
-
-
-#test:
-#  use_cdn: false
-#  video_id: blogVideo2
-#  class: ['class-two']
-#  multiple_source: true
-#  attributes:  # attributes to apply to the video container.
-#      autoplay: true
-#  save_data: true
