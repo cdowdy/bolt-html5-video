@@ -138,6 +138,23 @@ This will produce in the rendered HTML
 
 You add subtitles and tracks to your videos by adding a section to your named config titled *tracks*
 
+
+```yaml
+blogVideos:
+  # other config settings here
+  tracks:
+```
+
+It is recommended to prefix each subsection with the language of the particular subtitle or captions. Each of these subsections will need to have
+
+* kind: what kind of track are you providing? Values to place here are 'subtitles' or 'captions'
+* srclang: What is the source language of the provided file.
+* label: For English language subtitles or captions give it a descriptive label like - 'English Subtitles'
+* src: the path to the file. if the provided file is in your theme directory give that path, ie: '/theme/base-2016/your-video-subtitles.vtt'
+* default: if this is the default file mark this as true. Otherwise leave it out of the section.
+
+Here is a completed example of multiple language subtitles and English Captions:
+
 ```yaml
 blogVideos:
   # other settings here
