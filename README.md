@@ -2,6 +2,14 @@
 
 A Bolt Extension that allows you to play local videos either through ```/files/``` or from your own CDN.
 
+Quick Navigation:
+
+* [ Quick Usage With Defaults ](#quick-usage-with-defaults)
+* [Usage Walk-through](#usage-walk-through)
+* [Using Your Own CDN](#using-your-own-cdn)
+* [Adding Tracks and Subtitles](#adding-tracks-and-subtitles)
+* [Advanced Usage - over ride settings](#advanced-usage)
+
 Has current support for:
 
   * HTML5 Video Attributes
@@ -9,16 +17,13 @@ Has current support for:
     * controls
     * muted
     * loop
+  * preload options - metadata | auto | none
+  * video posters
+  * video width and height
   * Tracks & subtitles
   * Media Fragments (currently only 't' or the time)
+  * single or multiple video sources
 
-Quick Navigation:
-
-* [ Quick Usage ](#quick-usage-with-defaults)
-* [Usage Walk-through](#usage-walk-through)
-* [Using Your Own CDN](#using-your-own-cdn)
-* [Adding Tracks and Subtitles](#adding-tracks-and-subtitles)
-* [Advanced Usage - over ride settings](#advanced-usage)
 
 ## Quick Usage With Defaults
 
