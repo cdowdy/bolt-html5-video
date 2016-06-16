@@ -4,8 +4,8 @@ A Bolt Extension that allows you to play local videos either through ```/files/`
 
 Quick Navigation:
 
+* [Extension Set Up](#set-up)
 * [ Quick Usage With Defaults ](#quick-usage-with-defaults)
-* [Usage Walk-through](#usage-walk-through)
 * [Using Your Own CDN](#using-your-own-cdn)
 * [Adding Tracks and Subtitles](#adding-tracks-and-subtitles)
 * [Controlling Number of Video Sources](#controlling-video-sources)
@@ -24,6 +24,54 @@ Has current support for:
   * Tracks & subtitles
   * Media Fragments (currently only 't' or the time)
   * single or multiple video sources
+
+
+## Set Up
+
+To start off you'll need to have a field in your contenttypes that accepts/uses video. There are two types right off the bat you can use. The``file`` type and/or ``filelist`` type.
+
+**If You Plan To Upload Videos through the 'Edit' Option of the Backend With 'Upload File' You'll Need To Use the ``filelist`` Type**. This is because Bolt's backend will place the video in a directory. This extension assumes each file will be named the same. So an MP4 file will have the same name as a Webm or OGG.
+
+ ```yaml
+# your contenttypes.yml file
+entries:
+  name: Entries
+  singular_name: Entry
+  fields:
+    # other fields here
+    video: # our video field to call in the template
+    type: file # the type of field we are using.
+```
+
+
+
+If you're not using the default settings then create a new settings group in the extensions config file.
+
+```yaml
+# extensions config file
+blogVideos: # the name of our settings group!
+```
+
+Then follow the same structure in the *default* settings. Any setting left out of your new settings group will fall back to whatever is set in ``default``.
+
+
+```yaml
+blogVideos:
+  use_cdn: false
+  save_data: false
+  video_poster: 'path/to/poster.png'
+  attributes: [ 'controls', 'muted' ]
+  preload: 'metadata'
+  width_height: [ 400, 400 ]
+  multiple_source: true
+  video_types: [ 'webm', 'mp4' ]
+```
+
+Now in your template ( example: record.twig ) place this tag with your named settings group wherever you want a video!
+
+```twig
+{{ html5video(record.video, 'blogVideos' ) }}
+```
 
 
 ## Quick Usage With Defaults
@@ -52,49 +100,6 @@ and produce a video tag in your template.
   <source src="/files/your-video.webm" type="video/webm" >
   <source src="/files/your-video.mp4" type="video/mp4" >
 </video>
-```
-
-## Usage Walk-through
-
-To start off you'll need to have a field in your contenttypes that accepts/uses video. While building this extension I used the ``file`` type.
-
- ```yaml
-# your contenttypes.yml file
-entries:
-  name: Entries
-  singular_name: Entry
-  fields:
-    # other fields here
-    video: # our video field to call in the template
-    type: file # the type of field we are using.
-```
-
-If you're not using the default settings then create a new settings group in the extensions config file.
-
-```yaml
-# extensions config file
-blogVideos: # the name of our settings group!
-```
-
-Then follow the same structure in the *default* settings. Any setting left out of your new settings group will fall back to whatever is set in ``default``.
-
-
-```yaml
-blogVideos:
-  use_cdn: false
-  save_data: false
-  video_poster: 'path/to/poster.png'
-  attributes: [ 'controls', 'muted' ]
-  preload: 'metadata'
-  width_height: [ 400, 400 ]
-  multiple_source: true
-  video_types: [ 'webm', 'mp4' ]
-```
-
-Now in your template ( example: record.twig ) place this tag with your named settings group wherever you want a video!
-
-```twig
-{{ html5video(record.video, 'blogVideos' ) }}
 ```
 
 ## Using Your Own CDN
