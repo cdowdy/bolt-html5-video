@@ -8,6 +8,7 @@ Quick Navigation:
 * [Usage Walk-through](#usage-walk-through)
 * [Using Your Own CDN](#using-your-own-cdn)
 * [Adding Tracks and Subtitles](#adding-tracks-and-subtitles)
+* [Controlling Number of Video Sources](#controlling-video-sources)
 * [Advanced Usage - over ride settings](#advanced-usage)
 
 Has current support for:
@@ -195,7 +196,29 @@ For a deeper dive into WebVTT have a look at the following links:
 * [Mozilla Developer Network: Introduction to WebVTT](https://developer.mozilla.org/en-US/docs/Web/API/Web_Video_Text_Tracks_Format)
 
 
+## Controlling Video Sources
 
+When the config has ``multiple_source`` set to *true* as in the default settings this extension will use the file types specified in ``video_types``. Typically these are [MP4 - caniuse.com](http://caniuse.com/#search=mp4) and [WEBM - caniuse.com](http://caniuse.com/#search=webm) types. This will serve two (2) files.
+
+```html
+<video controls preload="metadata">
+  <source src="/files/your-video.webm" type="video/webm" >
+  <source src="/files/your-video.mp4" type="video/mp4" >
+</video>
+```
+
+If you would prefer to only serve one (1) file set ``multiple_source`` to false and then pass either a CDN url or the video attached to the record you want.
+
+One File with a record's video:
+
+```twig
+{# Your Twig Template ie. 'record.twig` #}
+{{ html5video(record.video ) }}
+```
+```html
+<!- The Rendered HTML in your page ->
+<video controls preload="metadata" src="/files/your-video.mp4"></video>
+```
 
 
 ## Advanced Usage
@@ -260,5 +283,3 @@ EX:
 ```twig
 {{ html5video( 'https://your-cdn.com/path/to/videos/example.webm' ) }}
 ```
-
-Has options for ```tracks``` and WebVTT files for subtitles http://html5doctor.com/video-subtitling-and-webvtt/#contents
