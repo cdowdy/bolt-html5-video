@@ -239,7 +239,7 @@ One file with your own CDN:
 ```
 ```html
 <!-- The Rendered HTML in your page -->
-<video controls preload="metadata" src="/files/your-video.mp4"></video>
+<video controls preload="metadata" src="https://your-cdn.com/videos/your-video.webm"></video>
 ```
 
 
