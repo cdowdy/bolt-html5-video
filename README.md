@@ -62,23 +62,22 @@ If you're not using the default settings then create a new settings group in the
 blogVideos: # the name of our settings group!
 ```
 
+Then follow the same structure in the *default* settings. Any setting left out of your new settings group will fall back to whatever is set in ``default``.
 
-Then create a config section in the extensions config file if you don't want to use the defaults. Give this a name.
-Settings left out of your named config will fall back to whatever is set in the 'default' config section.
 
 ```yaml
 blogVideos:
   use_cdn: false
   save_data: false
-  video_poster: 'path/to/poster.png' # if you want a poster image to load
+  video_poster: 'path/to/poster.png'
   attributes: [ 'controls', 'muted' ]
   preload: 'metadata'
-  width_height: [ 400, 400 ] # the width and height of the video element if you have one... optional
+  width_height: [ 400, 400 ]
   multiple_source: true
   video_types: [ 'webm', 'mp4' ]
 ```
 
-In the template file you are using a video use this extensions twig tag along with your named config like so:
+Now in your template ( example: record.twig ) place this tag with your named settings group wherever you want a video!
 
 ```twig
 {{ html5video(record.video, 'blogVideos' ) }}
