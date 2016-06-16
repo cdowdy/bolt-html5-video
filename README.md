@@ -55,6 +55,14 @@ entries:
     type: file # the type of field we are using.
 ```
 
+If you're not using the default settings then create a new settings group in the extensions config file.
+
+```yaml
+# extensions config file
+blogVideos: # the name of our settings group!
+```
+
+
 Then create a config section in the extensions config file if you don't want to use the defaults. Give this a name.
 Settings left out of your named config will fall back to whatever is set in the 'default' config section.
 
