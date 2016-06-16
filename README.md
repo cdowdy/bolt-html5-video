@@ -216,7 +216,7 @@ One File with a record's video:
 {{ html5video(record.video ) }}
 ```
 ```html
-<!- The Rendered HTML in your page ->
+<!-- The Rendered HTML in your page -->
 <video controls preload="metadata" src="/files/your-video.mp4"></video>
 ```
 
