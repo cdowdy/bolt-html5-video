@@ -218,13 +218,24 @@ default:
 </video>
 ```
 
-If you would prefer to only serve one (1) file set ``multiple_source`` to false and then pass either a CDN url or the video attached to the record you want.
+If you would prefer to only serve one (1) file set ``multiple_source`` to false and then pass either a CDN url or the video attached to the record you want. The file that will be served is whatever you pass in the template or the one you've uploaded to files or your record.
 
 One File with a record's video:
 
 ```twig
 {# Your Twig Template ie. 'record.twig` #}
 {{ html5video(record.video ) }}
+```
+```html
+<!-- The Rendered HTML in your page -->
+<video controls preload="metadata" src="/files/your-video.mp4"></video>
+```
+
+One file with your own CDN:
+
+```twig
+{# Your Twig Template ie. 'record.twig` #}
+{{ html5video('https://your-cdn.com/videos/your-video.webm') }}
 ```
 ```html
 <!-- The Rendered HTML in your page -->
