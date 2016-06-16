@@ -255,9 +255,19 @@ For a deeper dive into WebVTT have a look at the following links:
 * [HTML5 Doctor: Video Subtitling and WebVTT](http://html5doctor.com/video-subtitling-and-webvtt/)
 * [Mozilla Developer Network: Introduction to WebVTT](https://developer.mozilla.org/en-US/docs/Web/API/Web_Video_Text_Tracks_Format)
 
+## Controlling Start and End times
 
+Through the ``media_fragment: [ ]`` config setting you can start the video or end the video at a specific time.
 
+The example below starts the video at five seconds and will stop playing at twelve seconds.
 
+```yaml
+blogVideos:
+  #other settings here
+  media_fragment: [ 5, 12 ]
+```
+
+For more examples on this see [Mozilla Developer Network - HTML5 Video Specifying Playback Range ](https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Using_HTML5_audio_and_video#Specifying_playback_range)
 
 ## Advanced Usage
 You can over-ride default config settings on a per usage basis in your templates.
