@@ -200,6 +200,17 @@ For a deeper dive into WebVTT have a look at the following links:
 
 When the config has ``multiple_source`` set to *true* as in the default settings this extension will use the file types specified in ``video_types``. Typically these are [MP4 - caniuse.com](http://caniuse.com/#search=mp4) and [WEBM - caniuse.com](http://caniuse.com/#search=webm) types. This will serve two (2) files.
 
+```yaml
+# The config file
+default:
+  use_cdn: false
+  save_data: false
+  attributes: [ 'controls']
+  preload: 'metadata'
+  multiple_source: true
+  video_types: [ 'webm', 'mp4' ]
+```
+
 ```html
 <video controls preload="metadata">
   <source src="/files/your-video.webm" type="video/webm" >
