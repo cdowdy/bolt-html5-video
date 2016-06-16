@@ -55,7 +55,8 @@ entries:
     type: file # the type of field we are using.
 ```
 
-Then create a config section in the extensions config file if you don't want to use the defaults. Give this a name. Settings left out of your named config will fall back to whatever is set in the 'default' config section.
+Then create a config section in the extensions config file if you don't want to use the defaults. Give this a name.
+Settings left out of your named config will fall back to whatever is set in the 'default' config section.
 
 ```yaml
 blogVideos:
