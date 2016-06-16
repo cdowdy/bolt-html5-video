@@ -15,7 +15,10 @@ Has current support for:
 Quick Navigation:
 
 * [ Quick Usage ](#quick-usage-with-defaults)
-* [Usage Walkthrough](#usage-walk-through)
+* [Usage Walk-through](#usage-walk-through)
+* [Using Your Own CDN](#using-your-own-cdn)
+* [Adding Tracks and Subtitles](#adding-tracks-and-subtitles)
+* [Advanced Usage - over ride settings](#advanced-usage)
 
 ## Quick Usage With Defaults
 
