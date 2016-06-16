@@ -219,7 +219,7 @@ To over-ride these in a template place the tag in the template along with the na
 After your named config place a comma then your custom config setting(s).
 
 ```twig
-{{ html5video(record.video, 'blogVideos', { preload: [ 'auto' ] } )  }}
+{{ html5video(record.video, 'blogVideos', { preload: 'auto' } )  }}
 ```
 
 For multiple over-rides I would suggest placing them on a new line like so:
