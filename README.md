@@ -1,6 +1,6 @@
 # Bolt HTML5 Video Extension
 
-A Bolt Extension that allows you to play local videos either through ```/files/``` or from your own CDN.
+A Bolt Extension that allows you to play local videos either through ```/files/``` or from your own CDN. Also lets you say goodbye to heavy GIFs and allows you to use new video codec sweetness for short animations in Bolt!
 
 Quick Navigation:
 
