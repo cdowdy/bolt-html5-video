@@ -325,4 +325,4 @@ EX:
 ## Gotchas and FYI'S
 
 1. The video files should be the same name. When using multiple sources the filename will be appended with the types you provide in ``video_types``
- 2. If uploading through the contenttypes record edit/creation page you should use the filelist type instead of the file type
+2. If uploading through the contenttypes record edit/creation page you should use the filelist type instead of the file type
