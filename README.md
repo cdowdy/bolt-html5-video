@@ -33,6 +33,8 @@ To start off you'll need to have a field in your contenttypes that accepts/uses 
 
 **If You Plan To Upload Videos through the 'Edit' Option of the Backend With 'Upload File' You'll Need To Use the ``filelist`` Type**. This is because Bolt's backend will place the video in a directory. This extension assumes each file will be named the same. So an MP4 file will have the same name as a Webm or OGG.
 
+Regular File upload through 'upload files'
+
  ```yaml
 # your contenttypes.yml file
 entries:
@@ -41,9 +43,20 @@ entries:
   fields:
     # other fields here
     video: # our video field to call in the template
-    type: file # the type of field we are using.
-    # or if uploading through the record creating / edit screen
-    #type: filelist
+        type: file # the type of field we are using.
+```
+
+Uploading Files through the record's edit screen:
+
+ ```yaml
+# your contenttypes.yml file
+entries:
+  name: Entries
+  singular_name: Entry
+  fields:
+    # other fields here
+    video:
+        type: filelist
 ```
 
 
