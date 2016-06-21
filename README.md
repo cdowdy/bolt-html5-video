@@ -381,14 +381,14 @@ To use both of these contenttype's field types in your template use an ``if/else
   {{ html5video( record.videolist.0, 'blogVideos') }}
 {% endif %}
 {% if record.video %}
-  {{ html5video('record.video', 'blogVideos' ) }}
+  {{ html5video( record.video, 'blogVideos' ) }}
 {% endif %}
 
 {# of you could use one like this #}
 {% if record.videolist %}
   {{ html5video( record.videolist.0, 'blogVideos') }}
 {% else %}
-  {{ html5video('record.video', 'blogVideos' ) }}
+  {{ html5video( record.video, 'blogVideos' ) }}
 {% endif %}
 ```
 
