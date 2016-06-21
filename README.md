@@ -12,7 +12,7 @@ Quick Navigation:
 * [Controlling Start and End Times](#controlling-start-and-end-times)
 * [Advanced Usage - over ride settings](#advanced-usage)
 * [Uploading Video Files](#uploading-video-files)
-* [Using Both ``file`` & ``filelist`` types](#using-both-file-&-filelist-types)
+* [Using Both ``file`` & ``filelist`` types](#using-both-''file''-&-''filelist''-types)
 
 Has current support for:
 
