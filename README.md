@@ -372,6 +372,19 @@ entries:
 {{ html5video( record.videolist.0 ) }}
 ```
 
+## Using Both ``file`` & ``filelist`` types:
+
+To use both of these contenttype's field types in your template use an ``if/else`` statement similar to the one below:
+
+```twig
+{% if record.videolist %}
+  {{ html5video( record.videolist.0, 'blogVideos') }}
+{% endif %}
+{% if record.video %} {# or use {% else %} #}
+  {{ html5video('record.video', 'blogVideos' ) }}
+{% endif %}
+```
+
 
 <!--## Config Settings:-->
 
