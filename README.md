@@ -127,7 +127,7 @@ and produce a video tag in your template.
 
 ## Using Your Own CDN
 
-There is two (2) ways to use a CDN. The first is to add your CDN URL to the extensions config setting of ``cdn_url``
+There are two (2) ways to use a CDN. The first is to add your CDN URL to the extensions config setting of ``cdn_url``
 
 ```yaml
 cdn_url: https://your-cdn.com/path/to/files/
