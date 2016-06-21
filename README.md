@@ -12,7 +12,7 @@ Quick Navigation:
 * [Controlling Start and End Times](#controlling-start-and-end-times)
 * [Advanced Usage - over ride settings](#advanced-usage)
 * [Uploading Video Files](#uploading-video-files)
-* [Using Both ``file`` & ``filelist`` types](#using-both-file-&-filelist-types)
+* [Using Both ``file`` & ``filelist`` types](#using-both-file-and-filelist-types)
 
 Has current support for:
 
@@ -374,7 +374,7 @@ entries:
 {{ html5video( record.videolist.0 ) }}
 ```
 
-## Using Both file & filelist types:
+## Using Both file and filelist types:
 
 To use both of these contenttype's field types in your template use an ``if/else`` statement similar to the one below:
 
