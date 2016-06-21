@@ -376,7 +376,21 @@ entries:
 
 ## Using Both file and filelist types:
 
-To use both of these contenttype's field types in your template use an ``if/else`` statement similar to the one below:
+Structure your contenttype to use both ``file`` and ``filelist``
+
+```yaml
+# your contenttypes.yml file
+entries:
+  name: Entries
+  singular_name: Entry
+  fields:
+    video:
+      type: file
+    videolist:
+      type: filelist
+```
+
+Then in your template use an ``if/else`` statement similar to the one below:
 
 ```twig
 {% if record.videolist %}
@@ -393,6 +407,7 @@ To use both of these contenttype's field types in your template use an ``if/else
   {{ html5video( record.video, 'blogVideos' ) }}
 {% endif %}
 ```
+
 
 
 <!--## Config Settings:-->
