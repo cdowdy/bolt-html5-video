@@ -335,8 +335,10 @@ For multiple over-rides I would suggest placing them on a new line like so:
 Uploading through Bolt's Admin backend:
 
 1). Under the ``Settings`` navigation area click ``File Management > Uploaded Files ``
+
 2). Either create a folder for your videos or choose ``select file``
-  * When uploading choose all the video types you would like to serve. That is webm, mp4 or ogg.
+  * When uploading choose all the video types you would like to serve. That is webm, mp4 or ogg.  
+
 3). Click upload file.
 
 
