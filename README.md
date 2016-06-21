@@ -148,7 +148,7 @@ This will produce in the rendered HTML
 </video>
 ```
 
-The second way to do this is leave the ``cdn_url`` setting empty and place the full URL to your video in the tag:
+The second way to do this is leave the ``cdn_url`` setting empty and place the __full URL__ to your video in the tag:
 
 ```twig
 {{ html5video( 'https://your-cdn.com/path/to/videos/second-cdn-example.webm' ) }}
