@@ -337,34 +337,61 @@ Uploading through Bolt's Admin backend:
 1). Under the ``Settings`` navigation area click ``File Management > Uploaded Files ``
 
 2). Either create a folder for your videos or choose ``select file``
-  * When uploading choose all the video types you would like to serve. That is webm, mp4 or ogg.  
+  * When uploading choose all the video types you would like to serve. That is webm, mp4 or ogg.
 
 3). Click upload file.
 
+Uploading your files this way will allow you to use ``record.video`` portion in your twig tag.
 
-## Config Settings:
+Uploading through a record / contenttypes creation or edit page:
 
-__cdn_url__:
-set CDN url if its set and the config option of "use_cdn" is true then use this path for the video.
-example:
+1). You'll need to use ``filelist`` in your contenttypes video field.
 
-```yaml
-cdn_url: 'https://awesome-cdn.com/path/to/videos/'
+ ```yaml
+# your contenttypes.yml file
+entries:
+  name: Entries
+  singular_name: Entry
+  fields:
+    # other fields here
+    videolist:
+        type: filelist
 ```
 
-__use_cdn__:
-If you want to use a CDN. Defaults to false - or no you don't want to.
+2). When Editing your contenttype choose the field you're using for videos ( this example above is 'videolist' ) and select 'upload file'
 
-```yaml
-use_cdn:  [true | false ]
-```
+3). Chose all the filetypes you wish to serve for that particular record, ie webm, mp4 or ogg and upload those video files.
 
-If the above two are set then you can use just the filename in your templates to get the full path to the video. If there is no ``cdn_url`` set and ``use_cdn`` is true then you need to put the full url in your template.
-EX:
+4). In your template you can now use:
 
 ```twig
-{{ html5video( 'https://your-cdn.com/path/to/videos/example.webm' ) }}
+{{ html5video( record.videolist.0 ) }}
 ```
+
+
+<!--## Config Settings:-->
+
+<!--__cdn_url__:-->
+<!--set CDN url if its set and the config option of "use_cdn" is true then use this path for the video.-->
+<!--example:-->
+
+<!--```yaml-->
+<!--cdn_url: 'https://awesome-cdn.com/path/to/videos/'-->
+<!--```-->
+
+<!--__use_cdn__:-->
+<!--If you want to use a CDN. Defaults to false - or no you don't want to.-->
+
+<!--```yaml-->
+<!--use_cdn:  [true | false ]-->
+<!--```-->
+
+<!--If the above two are set then you can use just the filename in your templates to get the full path to the video. If there is no ``cdn_url`` set and ``use_cdn`` is true then you need to put the full url in your template.-->
+<!--EX:-->
+
+<!--```twig-->
+<!--{{ html5video( 'https://your-cdn.com/path/to/videos/example.webm' ) }}-->
+<!--```-->
 
 ## Gotchas and FYI'S
 
