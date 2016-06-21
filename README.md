@@ -290,6 +290,7 @@ Settings that can be currently over-ridden are:
 
 * video_poster
 * use_cdn
+* class
 * preload
 * width_height
 * media_fragment
@@ -298,22 +299,29 @@ Settings that can be currently over-ridden are:
 To over-ride these in a template place the tag in the template along with the named config:
 
 ```twig
-{{ html5video(record.video, 'blogVideos' ) }}
+{{ html5video( record.video, 'blogVideos' ) }}
 ```
 
 After your named config place a comma then your custom config setting(s).
 
 ```twig
-{{ html5video(record.video, 'blogVideos', { preload: 'auto' } )  }}
+{{ html5video( record.video, 'blogVideos', { preload: 'auto' } )  }}
 ```
+
+or to add an ID for a JavaScript hook:
+
+```twig
+{{ html5video( record.video, 'blogVideos', { video_id: 'js-id' } ) }}
+```
+
 
 For multiple over-rides I would suggest placing them on a new line like so:
 
 ```twig
-{{ html5video(record.video, 'blogVideos', {
+{{ html5video( record.video, 'blogVideos', {
   video_poster: 'path/to/custom/poster.png',
   use_cdn: true,
-  preload: 'auto'
+  preload: 'auto',
   width_height: [ 600, 400 ],
   media_fragment: [ 0, 60 ],
   multiple_source: false
