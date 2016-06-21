@@ -332,7 +332,7 @@ For multiple over-rides I would suggest placing them on a new line like so:
 
 ## Uploading Video Files
 
-Uploading through Bolt's Admin backend:
+**Uploading through Bolt's Admin backend**:
 
 1). Under the ``Settings`` navigation area click ``File Management > Uploaded Files ``
 
@@ -343,7 +343,7 @@ Uploading through Bolt's Admin backend:
 
 Uploading your files this way will allow you to use ``record.video`` portion in your twig tag.
 
-Uploading through a record / contenttypes creation or edit page:
+**Uploading through a record / contenttypes creation or edit page**:
 
 1). You'll need to use ``filelist`` in your contenttypes video field.
 
