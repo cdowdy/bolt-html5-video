@@ -31,7 +31,7 @@ Has current support for:
 
 To start off you'll need to have a field in your contenttypes that accepts/uses video. There are two types right off the bat you can use. The``file`` type and/or ``filelist`` type.
 
-**If You Plan To Upload Videos through the 'Edit' Option of the Backend With 'Upload File' You'll Need To Use the ``filelist`` Type**. This is because Bolt's backend will place the video in a directory. This extension assumes each file will be named the same. So an MP4 file will have the same name as a Webm or OGG.
+**If You Plan To Upload Videos through the 'Edit' Option of the Backend With 'Upload File' You'll Need To Use the ``filelist`` Type**. This is because Bolt's backend will place the video in a directory. This extension assumes each file will be named the same. So an MP4 file will have the same name and file path as a Webm or OGG.
 
 Regular File upload through 'upload files'
 
