@@ -343,6 +343,10 @@ For multiple over-rides I would suggest placing them on a new line like so:
 
 Uploading your files this way will allow you to use ``record.video`` portion in your twig tag.
 
+```twig
+{{ html5video( record.video) }}
+```
+
 **Uploading through a record / contenttypes creation or edit page**:
 
 1). You'll need to use ``filelist`` in your contenttypes video field.
