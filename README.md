@@ -22,6 +22,7 @@ Has current support for:
   * preload options - metadata | auto | none
   * video posters
   * video width and height
+  * custom classes and id's
   * Tracks & subtitles
   * Media Fragments (currently only 't' or the time)
   * single or multiple video sources
