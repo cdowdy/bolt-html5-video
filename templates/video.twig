@@ -13,7 +13,17 @@
 
 
 
+{# =================== VIDEO HTML CLASS AND VIDEO ID  =================================== #
+    adds a class to the video element for styling and an ID for styling/JavaScript Hook
+# ================================================================================= #}
+{% macro styleAttrib( class ) %}
+{% if class %}{% spaceless %} class="{% for c in class %} {{ c }} {% endfor %}"{% endspaceless %} {% endif %}
+{% endmacro styleAttrib %}
 
+
+{% macro vidID( video_id ) %}
+{% spaceless %}{% if video_id %} id="{{ video_id }}" {% endif %}{% endspaceless %}
+{% endmacro vidID %}
 {# ==================== VIDEO SINGLE SOURCE =========================================== #
     Macro for the single source video
 # ================================================================================ #}
@@ -132,6 +142,6 @@
  #          YALL GONE MAKE ME ADD SOME SOURCES UP IN HERE UP IN HERE
  #
  # =================================================================================#}
-<video {% spaceless %} {{ attrib.attribBuild( attributes, preload, poster, widthHeight, singleSrc, multiSrc, fragment ) }}{% endspaceless %}>
+<video {% spaceless %}{{ attrib.vidID(  video_id ) }} {{ attrib.styleAttrib( class ) }} {{ attrib.attribBuild( attributes, preload, poster, widthHeight, singleSrc, multiSrc, fragment ) }}{% endspaceless %}>
 {{ attrib.bodyBuild(multiVid, multiSrc, tracks, fragment) }}
 </video>
