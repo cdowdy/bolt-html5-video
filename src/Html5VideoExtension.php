@@ -78,15 +78,24 @@ class Html5VideoExtension extends SimpleExtension
         $videoTypes = $mergedOptions['video_types'];
         $multipleSource = $mergedOptions['multiple_source'];
 
+//        $videoID = $mergedOptions['video_id'];
+        $videoID = $this->getClassID( $configName, 'video_id');
+
         // get tracks if present
         $tracks = $mergedOptions['tracks'];
 
+        // class passed through the twig template
+        $templateClass = $options['class'];
+        // classes in the config
+        $classes = $defaultOptions['class'];
 
-//        if ($isCDN) {
-//            $singleVid =  $this->cdnFile($file);
-//        } else {
-//            $singleVid = $this->videoFile($file);
-//        }
+        if ( $templateClass && $classes ) {
+            $htmlClass = array_merge($classes, $templateClass );
+        } elseif ($templateClass){
+            $htmlClass = $templateClass;
+        } else {
+            $htmlClass = $classes;
+        }
 
 
         if ($multipleSource) {
@@ -104,6 +113,8 @@ class Html5VideoExtension extends SimpleExtension
             'preload' => $preload,
             'widthHeight' => $widthHeight,
             'attributes' => $attributes,
+            'class' => $htmlClass,
+            'video_id' => $videoID,
             'is_cdn' => $isCDN,
             'tracks' => $tracks,
 
@@ -161,6 +172,32 @@ class Html5VideoExtension extends SimpleExtension
         return $class;
     }
 
+    protected function getClassID( $config, $type )
+    {
+        $cfg = $this->getConfig();
+        $configName = $this->getConfigName($config);
+
+        return $cfg[ $configName ][ $type ];
+
+    }
+
+
+    protected function getVideoId($config)
+    {
+        $confg = $this->getConfig();
+        $configName = $this->getConfigName($config);
+        $videoID = $confg[ $configName ][ 'video_id' ];
+
+        $id = $confg[ 'default' ][ 'video_id' ];
+
+        // if a class array is in the config set the $class variable to the class array
+        if ( isset($videoID ) ) {
+            $id = $videoID;
+        }
+
+        return $id;
+    }
+
 
     /**
      * @param $config
@@ -183,6 +220,7 @@ class Html5VideoExtension extends SimpleExtension
         $tracks = $this->vidTracks( $configName );
 
         $class = $this->getHTMLClass($configName);
+        $id = $this->getVideoId($configName);
         $multiple_source = $cfg[$configName]['multiple_source'];
 
         $videoTypes = $cfg[ $configName ]['video_types'];
@@ -191,6 +229,7 @@ class Html5VideoExtension extends SimpleExtension
             'use_cdn' => $cdn,
             'video_id' => $videoID,
             'class' => $class,
+            'video_id' => $id,
             'multiple_source' => $multiple_source,
             'video_types' => $videoTypes,
             'save_data' => $saveData,
