@@ -115,6 +115,38 @@
 
 
 
+{# =================================================================================#
+ #
+ #      Save Data Header Macro
+ #
+ # =================================================================================#}
+
+{#{% macro sdOpt( sdOpt) %}#}
+ {#{% if sdOpt.message %}#}
+    {#{{ sdOpt.message }}#}
+{#{% else %}#}
+
+
+{#{% endmacro sdOpt %}#}
+
+{#<p>Message: {{ sdOpt.message }}</p>#}
+{#<p>button class: {{ sdOpt.button_class }}</p>#}
+
+{% macro saveData( save_data, multiSrc, video_types, sd_file, sdOpt ) %}
+{% if sdOpt.wrapping_div %}
+<div {% if sdOpt.wrapping_div_class %}class="{% for c in sdOpt.wrapping_div_class %}{{ c }} {% endfor %}"{% endif %}>
+{% endif %}
+  <p {% if sdOpt.message_class %}class="{% for c in sdOpt.message_class %}{{ c }} {% endfor %}"{% endif %}>{% if sdOpt.message %}{{ sdOpt.message }}{% else %}Save Data Header is Present. To Play Video click the video button below.{% endif %}</p>
+  <button class="loadVideo {% if sdOpt.button_class %}{% for c in sdOpt.button_class %}{{ c }} {% endfor %}{% endif %}"
+  {% if multiSrc %}
+      data-save="{{ sd_file }}.{ {% for types in video_types %}{{ types }}{% if not loop.last %},{% endif %}{% endfor %}}">
+  {% else %}
+      data-save="{% for vid, extension in sd_file %}{{ vid }}.{ {{ extension }} }{% endfor %}">{% endif %}Load Video</button>
+{% if sdOpt.wrapping_div %}
+</div>
+{% endif %}
+{% endmacro saveData %}
+
 
 {# =================== VIDEO TAG BODY BUILDING ======================================== #
  #
@@ -142,6 +174,14 @@
  #          YALL GONE MAKE ME ADD SOME SOURCES UP IN HERE UP IN HERE
  #
  # =================================================================================#}
+
+{% set SaveData = 'Save-Data' %}
+
+{% if save_data and app.request.headers.get( SaveData|lower ) %}
+{{ attrib.saveData( save_data, multiSrc, video_types, sd_file, sdOpt ) }}
+{% else %}
 <video {% spaceless %}{{ attrib.vidID(  video_id ) }} {{ attrib.styleAttrib( class ) }} {{ attrib.attribBuild( attributes, preload, poster, widthHeight, singleSrc, multiSrc, fragment ) }}{% endspaceless %}>
 {{ attrib.bodyBuild(multiVid, multiSrc, tracks, fragment) }}
 </video>
+{% endif  %}
+
