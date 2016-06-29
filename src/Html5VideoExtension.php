@@ -17,20 +17,6 @@ use Bolt\Library as Lib;
  */
 class Html5VideoExtension extends SimpleExtension
 {
-    /**
-     * {@inheritdoc}
-     */
-//    public function registerFields()
-//    {
-//        /*
-//         * Custom Field Types
-//         */
-//
-//        return [
-//            new Field\HTML5VideoField(),
-//        ];
-//    }
-
 
     /**
      * {@inheritdoc}
@@ -72,6 +58,7 @@ class Html5VideoExtension extends SimpleExtension
 
         $poster = $mergedOptions['video_poster'];
         $isCDN = $mergedOptions['use_cdn'];
+        $saveData = $mergedOptions['save_data'];
         $preload = $mergedOptions['preload'];
         $widthHeight = $mergedOptions['width_height'];
         $mediaFragment = $mergedOptions['media_fragment'];
@@ -79,7 +66,6 @@ class Html5VideoExtension extends SimpleExtension
         $multipleSource = $mergedOptions['multiple_source'];
 
         $videoID = $mergedOptions['video_id'];
-//        $videoID = $this->getClassID( $configName, 'video_id');
 
         // get tracks if present
         $tracks = $mergedOptions['tracks'];
@@ -104,12 +90,21 @@ class Html5VideoExtension extends SimpleExtension
             $singleVid = $this->videoFile( $file, $isCDN );
         }
 
+        if ($saveData) {
+            $saveDataFile = $this->saveDataFile($file, $isCDN, $multipleSource, $videoTypes);
+            $sdOptions = $this->sdOptions();
+        }
+
         $config = $this->getConfig();
+
 
 
         $context = [
             'singleSrc' => $singleVid,
             'poster' => $poster,
+            'save_data' => $saveData,
+            'sd_file' => $saveDataFile,
+            'sdOpt' => $sdOptions,
             'preload' => $preload,
             'widthHeight' => $widthHeight,
             'attributes' => $attributes,
@@ -120,6 +115,7 @@ class Html5VideoExtension extends SimpleExtension
 
             'multiSrc' => $multipleSource,
             'multiVid' => $multiVideo,
+            'video_types' => $videoTypes,
             'fragment' => $mediaFragment
         ];
 
@@ -153,25 +149,12 @@ class Html5VideoExtension extends SimpleExtension
 
     /**
      * @param $config
-     *
+     * @param $type
      * @return mixed
+     *
+     *  get the HTML Class or ID set in the config and pass this to the
+     *  getOptions method :)
      */
-//    protected function getHTMLClass($config)
-//    {
-//        $confg = $this->getConfig();
-//        $configName = $this->getConfigName($config);
-//        $htmlClass = $confg[ $configName ][ 'class' ];
-//
-//        $class = $confg[ 'default' ][ 'class' ];
-//
-//        // if a class array is in the config set the $class variable to the class array
-//        if ( isset($htmlClass ) ) {
-//            $class = $htmlClass;
-//        }
-//
-//        return $class;
-//    }
-
     protected function getClassID( $config, $type )
     {
         $cfg = $this->getConfig();
@@ -182,33 +165,22 @@ class Html5VideoExtension extends SimpleExtension
     }
 
 
-//    protected function getVideoId($config)
-//    {
-//        $confg = $this->getConfig();
-//        $configName = $this->getConfigName($config);
-//        $videoID = $confg[ $configName ][ 'video_id' ];
-//
-//        $id = $confg[ 'default' ][ 'video_id' ];
-//
-//        // if a class array is in the config set the $class variable to the class array
-//        if ( isset($videoID ) ) {
-//            $id = $videoID;
-//        }
-//
-//        return $id;
-//    }
 
 
     /**
      * @param $config
      * @return array
+     *
+     * gather all the config options and config option methods
+     * create one array that is then passed into the  twig callback function for HTML5 video
      */
     function getOptions( $config )
     {
         $cfg = $this->getConfig();
         $configName = $this->getConfigName($config);
+
         $cdn = $cfg[ $configName ][ 'use_cdn' ];
-        $videoID = $cfg[ $configName ]['video_id'];
+//        $videoID = $cfg[ $configName ]['video_id'];
         $saveData = $cfg[ $configName ]['save_data'];
 
         $attributes = $cfg[ $configName ]['attributes'];
@@ -216,13 +188,11 @@ class Html5VideoExtension extends SimpleExtension
         $widthHeight = $cfg[ $configName ]['width_height'];
         $poster = $cfg[ $configName ]['video_poster'];
         $mediaFragment = $this->mediaFragment( $configName );
-
         $tracks = $this->vidTracks( $configName );
 
-//        $class = $this->getHTMLClass($configName);
-//        $id = $this->getVideoId($configName);
         $class = $this->getClassID( $configName, 'class');
-        $id = $this->getClassID( $configName, 'video_id');
+        $videoID = $this->getClassID( $configName, 'video_id');
+
         $multiple_source = $cfg[$configName]['multiple_source'];
 
         $videoTypes = $cfg[ $configName ]['video_types'];
@@ -231,7 +201,7 @@ class Html5VideoExtension extends SimpleExtension
             'use_cdn' => $cdn,
             'video_id' => $videoID,
             'class' => $class,
-            'video_id' => $id,
+//            'video_id' => $id,
             'multiple_source' => $multiple_source,
             'video_types' => $videoTypes,
             'save_data' => $saveData,
@@ -248,6 +218,74 @@ class Html5VideoExtension extends SimpleExtension
         return $defaults;
     }
 
+
+    /**
+     * @param $filename
+     * @param $isCDN
+     * @param $msrc
+     * @param $types
+     * @return array|string
+     */
+    protected function saveDataFile( $filename, $isCDN, $msrc, $types )
+    {
+
+        $fileInfo = pathinfo($this->cdnFile($filename));
+        $singlePath = pathinfo($this->videoFile($filename));
+
+        $saveDataFile = [];
+
+        if ($msrc && $isCDN) {
+            foreach ($types as $type ) {
+                $saveDataFile = $fileInfo['dirname'] . '/' . $fileInfo['filename'] ;
+            }
+        }
+
+
+        if ($msrc && !$isCDN) {
+            foreach ($types as $type ) {
+                $saveDataFile = $singlePath['dirname'] . '/' . $singlePath['filename'] ;
+            }
+        }
+
+        if (!$msrc && $isCDN) {
+            $saveDataFile = [ $fileInfo['dirname'] . '/' . $fileInfo['filename'] => $fileInfo['extension'] ]  ;
+        }
+
+        if (!$msrc && !$isCDN) {
+            $saveDataFile = [ $singlePath['dirname'] . '/' . $singlePath['filename'] => $singlePath['extension'] ] ;
+        }
+
+        return $saveDataFile;
+    }
+
+    /**
+     * @return array
+     *
+     * get all the options for the save data option
+     * a Wrapping div
+     * Div and Paragraph tags classes
+     * a custom message
+     */
+    protected function sdOptions(  )
+    {
+        $cfg = $this->getConfig();
+        $sdConfig = $cfg['save_data_options'];
+
+        $message = $sdConfig['message'];
+        $messageClass = $sdConfig['message_class'];
+        $buttonClass = $sdConfig['button_class'];
+        $wrapDiv = $sdConfig['wrapping_div'];
+        $divClass = $sdConfig['wrapping_div_class'];
+
+
+        return $sdOptions = [
+            'message' => $message,
+            'message_class' => $messageClass,
+            'button_class' => $buttonClass,
+            'wrapping_div' => $wrapDiv,
+            'wrapping_div_class' => $divClass
+        ];
+    }
 
     /**
      * @param $config
@@ -307,6 +345,11 @@ class Html5VideoExtension extends SimpleExtension
     // If its a URL then we'll just pass it along
     // if it isn't a URL then pass the filename to Bolt's "safefilename" function and attach it to the
     // filepath of hte site
+    /**
+     * @param $filename
+     * @param $cdn
+     * @return string
+     */
     public function videoFile($filename, $cdn)
     {
         $app = $this->getContainer();
@@ -328,6 +371,10 @@ class Html5VideoExtension extends SimpleExtension
         return $video;
     }
 
+    /**
+     * @param $filename
+     * @return string
+     */
     protected function cdnFile($filename)
     {
         $confg = $this->getConfig();
@@ -347,6 +394,13 @@ class Html5VideoExtension extends SimpleExtension
         return $video;
     }
 
+    /**
+     * @param $filename
+     * @param $isCDN
+     * @param $msrc
+     * @param $types
+     * @return array
+     */
     protected function multipleVids($filename, $isCDN, $msrc, $types )
     {
 
@@ -374,6 +428,10 @@ class Html5VideoExtension extends SimpleExtension
 
     }
 
+    /**
+     * @param $cfg
+     * @return mixed
+     */
     protected function vidTracks( $cfg )
     {
         $config = $this->getConfig();
@@ -384,6 +442,10 @@ class Html5VideoExtension extends SimpleExtension
         return $trackConfig;
     }
 
+    /**
+     * @param $cfg
+     * @return mixed
+     */
     protected function mediaFragment( $cfg )
     {
         $config = $this->getConfig();
@@ -398,6 +460,10 @@ class Html5VideoExtension extends SimpleExtension
     // since we can pass a CDN URL to our twig function in addition to
     // the files from either {{ record.videoFile }} or from the files directory.. ie. 'site/files/video.webm'
     // we'll get the host of the string(filename) if it exists.
+    /**
+     * @param $string
+     * @return string
+     */
     public function getHost($string) {
         $url = parse_url(trim($string));
 
