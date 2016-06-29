@@ -121,17 +121,6 @@
  #
  # =================================================================================#}
 
-{#{% macro sdOpt( sdOpt) %}#}
- {#{% if sdOpt.message %}#}
-    {#{{ sdOpt.message }}#}
-{#{% else %}#}
-
-
-{#{% endmacro sdOpt %}#}
-
-{#<p>Message: {{ sdOpt.message }}</p>#}
-{#<p>button class: {{ sdOpt.button_class }}</p>#}
-
 {% macro saveData( save_data, multiSrc, video_types, sd_file, sdOpt ) %}
 {% if sdOpt.wrapping_div %}
 <div {% if sdOpt.wrapping_div_class %}class="{% for c in sdOpt.wrapping_div_class %}{{ c }} {% endfor %}"{% endif %}>
