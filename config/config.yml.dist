@@ -18,7 +18,7 @@ save_data_options:
 
 # breakdown of options available to use:
 # * use_cdn: [true | false ] this defaults to false
-# * save_data: true | false check for the save-data client hint header and don't load videos unless the user wants to.
+# * save_data: true | false check for the save-data client hint header and don't load videos unless the user wants to. CURRENTLY NOT AVAILABLE :(
 # * video_id: gives the containing element an ID as a hook for styling :( or JavaScript :)
 # * class: CSS class
 # * attributes: [ 'autoplay', 'controls', 'muted', 'loop' ] # dont use autplay please :)
@@ -34,7 +34,6 @@ save_data_options:
 # ================================================================================= #
 #default:
 #  use_cdn: true
-#  save_data: true
 #  video_id: blogVideo
 #  class: ['class-one']
 #  attributes: [ 'autoplay', 'controls', 'muted', 'loop' ]
@@ -45,7 +44,6 @@ save_data_options:
 
 default:
   use_cdn: false
-  save_data: false
   attributes: [ 'controls']
   preload: 'metadata'
   multiple_source: true
@@ -55,10 +53,9 @@ default:
 
 test:
   use_cdn: false
-  save_data: true
   class: [ 'test-class' ]
   video_id: 'testID'
-  video_poster: 'extensions/vendor/cdowdy/bolt-html5-video/img/poster-test.svg' # if you want a poster image to load
+  video_poster: 'theme/base-2016/images/poster-test.svg' # if you want a poster image to load
   attributes: [ 'controls']
   preload: 'metadata'
   width_height: [ 400, 400 ] # the width and height of the video element if you have one... optional
