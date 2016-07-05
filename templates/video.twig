@@ -164,13 +164,13 @@
  #
  # =================================================================================#}
 
-{% set SaveData = 'Save-Data' %}
+{#{% set SaveData = 'Save-Data' %}#}
 
-{% if save_data and app.request.headers.get( SaveData|lower ) %}
-{{ attrib.saveData( save_data, multiSrc, video_types, sd_file, sdOpt ) }}
-{% else %}
+{#{% if save_data and app.request.headers.get( SaveData|lower ) %}#}
+{#{{ attrib.saveData( save_data, multiSrc, video_types, sd_file, sdOpt ) }}#}
+{#{% else %}#}
 <video {% spaceless %}{{ attrib.vidID(  video_id ) }} {{ attrib.styleAttrib( class ) }} {{ attrib.attribBuild( attributes, preload, poster, widthHeight, singleSrc, multiSrc, fragment ) }}{% endspaceless %}>
 {{ attrib.bodyBuild(multiVid, multiSrc, tracks, fragment) }}
 </video>
-{% endif  %}
+{#{% endif  %}#}
 
