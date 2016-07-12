@@ -356,6 +356,37 @@ For multiple over-rides I would suggest placing them on a new line like so:
   multiple_source: false
   } )
 }}
+```  
+
+## Save Data Option and Client Hints  
+
+With the ``save_data: true`` option set in the Extensions config there will be a check for the Client-Hint header of 'Save-Data: On'.  
+Currently these browsers will advertise this header:  
+
+* Chrome
+* Opera 
+* Yandex 
+
+With this option set a message and a button will be rendered instead of downloading and rendering the video. You can control the message that is delivered to the user, CSS styles for both the message and button.  
+ 
+```yaml  
+save_data_options:  
+  message: 'The Save Data Header is Present. To Play and Load the Video click the button below.'
+  message_class: [ 'your-paragraph', 'classes' ]
+  button_class: [ 'button' , 'primary' ]
+  wrapping_div: true
+  wrapping_div_class: [ 'class', 'that-wraps', 'the-paragraph-and-button' ]  
+```  
+
+With these set here is how it will look instead of a video.  
+
+```html  
+<div class="class that-wraps the-paragraph-and-button">  
+  <p class="your-paragraph classes">
+   The Save Data Header is Present. To Play and Load the Video click the button below.
+  </p>  
+  <button class="button primary"  
+        <!-- video data here --> >Load Video</button>
 ```
 
 ## Uploading Video Files
