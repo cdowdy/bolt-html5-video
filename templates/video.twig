@@ -74,7 +74,7 @@
 # ================================================================================ #}
 
 {% macro vidDimensions( widthHeight ) %}
-{% spaceless %}{% if widthHeight %} width="{{ widthHeight.0 }}" height="{{ widthHeight.1 }}"{% endif %}{% endspaceless %}
+{% spaceless %}{% if widthHeight %}{% for key, value in widthHeight %}{{ key }}="{{ value }}"{% endfor %}{% endif %}{% endspaceless %}
 {% endmacro vidDimensions %}
 
 
@@ -121,19 +121,50 @@
  #
  # =================================================================================#}
 
-{% macro saveData( save_data, multiSrc, video_types, sd_file, sdOpt ) %}
+{% macro savedAttrib( attributes) %}
+{% spaceless %}{% for attrib in attributes %}"{{ attrib }}"{% if not loop.last %},{% endif %}{% endfor %}{% endspaceless %}
+{% endmacro savedAttrib %}
+
+{% macro savedClasses(class) %}
+{% spaceless %}{% for c in class %}"{{ c }}"{% if not loop.last %},{% endif %}{% endfor %}{% endspaceless %}
+{% endmacro savedClasses %}
+
+{% macro savedwidthHeight(widthHeight) %}
+{% spaceless %}{{ widthHeight|json_encode }}{% endspaceless %}
+{% endmacro savedwidthHeight %}
+
+
+{% macro savedTracks( tracks ) %}
+    {% if tracks %}
+        {{ tracks|json_encode }}
+    {% endif %}
+{% endmacro savedTracks %}
+
+
+{% macro saveData( save_data, multiSrc, video_types, multiVid, sd_file, sdOpt, video_id, class, attributes, preload, poster, widthHeight, tracks ) %}
+
+
+{% import _self as at %}
+
+
 {% if sdOpt.wrapping_div %}
-<div {% if sdOpt.wrapping_div_class %}class="{% for c in sdOpt.wrapping_div_class %}{{ c }} {% endfor %}"{% endif %}>
+    <div {% if sdOpt.wrapping_div_class %}class="{% for c in sdOpt.wrapping_div_class %}{{ c }} {% endfor %}"{% endif %}>
 {% endif %}
-  <p {% if sdOpt.message_class %}class="{% for c in sdOpt.message_class %}{{ c }} {% endfor %}"{% endif %}>{% if sdOpt.message %}{{ sdOpt.message }}{% else %}Save Data Header is Present. To Play Video click the video button below.{% endif %}</p>
-  <button class="loadVideo {% if sdOpt.button_class %}{% for c in sdOpt.button_class %}{{ c }} {% endfor %}{% endif %}"
-  {% if multiSrc %}
-      data-save="{{ sd_file }}.{ {% for types in video_types %}{{ types }}{% if not loop.last %},{% endif %}{% endfor %}}">
-  {% else %}
-      data-save="{% for vid, extension in sd_file %}{{ vid }}.{ {{ extension }} }{% endfor %}">{% endif %}Load Video</button>
-{% if sdOpt.wrapping_div %}
-</div>
-{% endif %}
+
+    <p {% if sdOpt.message_class %}class="save-data {% for c in sdOpt.message_class %}{{ c }} {% endfor %}"{% endif %}>{% if sdOpt.message %}{{ sdOpt.message }}{% else %}Save Data Header is Present. To Play Video click the video button below.{% endif %}
+    </p>
+
+    <button class="loadVideo {% if sdOpt.button_class %}{% for c in sdOpt.button_class %}{{ c }} {% endfor %}{% endif %}"
+    {% if video_id %}data-id="{{ video_id }}"{% endif %}
+    {% if class %}data-class='[ {{ at.savedClasses( class) }} ]'{% endif %}
+    {% if poster %}data-poster="{{ poster }}"{% endif %}
+    {% if widthHeight %}data-width-height='{{ at.savedwidthHeight(widthHeight) }}'{% endif %}
+    {% if tracks %}data-tracks='{{ at.savedTracks(tracks) }}'{% endif %}
+            data-attribs='[ {{ at.savedAttrib( attributes) }} ]'
+            data-save='{{ sd_file|json_encode }}'>Load Video</button>
+    {% if sdOpt.wrapping_div %}
+        </div>
+    {% endif %}
 {% endmacro saveData %}
 
 
@@ -164,13 +195,12 @@
  #
  # =================================================================================#}
 
-{#{% set SaveData = 'Save-Data' %}#}
+{% set SaveData = 'Save-Data' %}
 
-{#{% if save_data and app.request.headers.get( SaveData|lower ) %}#}
-{#{{ attrib.saveData( save_data, multiSrc, video_types, sd_file, sdOpt ) }}#}
-{#{% else %}#}
+{% if save_data and app.request.headers.get( SaveData|lower ) %}
+{{ attrib.saveData( save_data, multiSrc, video_types, multiVid, sd_file, sdOpt,video_id, class,  attributes, preload, poster, widthHeight, tracks  ) }}
+{% else %}
 <video {% spaceless %}{{ attrib.vidID(  video_id ) }} {{ attrib.styleAttrib( class ) }} {{ attrib.attribBuild( attributes, preload, poster, widthHeight, singleSrc, multiSrc, fragment ) }}{% endspaceless %}>
 {{ attrib.bodyBuild(multiVid, multiSrc, tracks, fragment) }}
 </video>
-{#{% endif  %}#}
-
+{% endif  %}
