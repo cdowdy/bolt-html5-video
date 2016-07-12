@@ -163,7 +163,33 @@ This will produce in the rendered HTML
   <source src="https://your-cdn.com/path/to/videos/second-cdn-example.webm" type="video/webm" >
   <source src="https://your-cdn.com/path/to/videos/second-cdn-example.mp4" type="video/mp4" >
 </video>
-```
+```  
+
+## Adding Width's and Heights  
+When adding width and heights the format is as follows:  
+
+```yaml
+blogVideos:
+  width_height: [ your-width, your-height ]
+```  
+
+If you want to use a percentage: ie 100%, you **MUST** put it in quotes:  
+
+```yaml
+blogVideos:
+  width_height: [ 400, '100%' ]
+```  
+
+This will produce in the rendered HTML
+
+```html
+<video width="400" height="100%">
+  <source src="/files/your=file.webm" type="video/webm" >
+  <source src="/files/your=file.mp4" type="video/mp4" >
+</video>
+```  
+
+
 
 ## Controlling Video Sources
 
