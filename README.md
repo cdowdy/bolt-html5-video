@@ -390,7 +390,10 @@ With these set here is how it will look instead of a video.
   <button class="button primary"  
         <!-- video data here --> >Load Video</button>  
 </div>        
-```
+```  
+Here is how it would look on the page and clicking through the buttons.  
+
+![Save Data Enabled and Clicking load video button to load the video](https://raw.githubusercontent.com/cdowdy/bolt-html5-video/master/screenshots/save-data-enabled.gif)
 
 ## Uploading Video Files
 
