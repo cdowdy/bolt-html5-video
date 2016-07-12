@@ -365,7 +365,9 @@ Currently these browsers will advertise this header:
 
 * Chrome
 * Opera 
-* Yandex 
+* Yandex  
+
+For more infor on how a user can enable data-saving in chrome for Android or iOS, or through desktop Chrome see [Reduce Data Usage in Chrome](https://developer.chrome.com/multidevice/data-compression)
 
 With this option set a message and a button will be rendered instead of downloading and rendering the video. You can control the message that is delivered to the user, CSS styles for both the message and button.  
  
