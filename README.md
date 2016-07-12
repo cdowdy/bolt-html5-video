@@ -386,7 +386,8 @@ With these set here is how it will look instead of a video.
    The Save Data Header is Present. To Play and Load the Video click the button below.
   </p>  
   <button class="button primary"  
-        <!-- video data here --> >Load Video</button>
+        <!-- video data here --> >Load Video</button>  
+</div>        
 ```
 
 ## Uploading Video Files
