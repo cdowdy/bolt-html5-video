@@ -308,6 +308,13 @@ The example below starts the video at five seconds and will stop playing at twel
 blogVideos:
   #other settings here
   media_fragment: [ 5, 12 ]
+```  
+ 
+```html
+<video controls preload="metadata">
+  <source src="/files/your-video.webm" type="video/webm#t=5,12" >
+  <source src="/files/your-video.mp4" type="video/mp4#t=5,12" >  
+</video>
 ```
 
 For more examples on this see [Mozilla Developer Network - HTML5 Video Specifying Playback Range ](https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Using_HTML5_audio_and_video#Specifying_playback_range)
