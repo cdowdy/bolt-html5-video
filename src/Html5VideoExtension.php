@@ -16,7 +16,13 @@ use Bolt\Library as Lib;
 class Html5VideoExtension extends SimpleExtension
 {
 
-    private $_currentSD = 'save-data-video.07-12-2016-27.min.js';
+    /**
+     * @var string
+     */
+    private $_currentSD = 'save-data-video.07-13-2016-12.min.js';
+    /**
+     * @var bool
+     */
     private $_scriptAdded = FALSE;
 
     /**
@@ -93,13 +99,14 @@ class Html5VideoExtension extends SimpleExtension
         isset($multipleSource) ? $multiVideo : $singleVid;
 
         if ($saveData) {
-            $saveDataFile = $this->saveDataFile($file, $isCDN, $multipleSource, $videoTypes);
+            $saveDataFile = $this->saveDataFile($file, $isCDN, $multipleSource, $videoTypes, $mediaFragment);
             $sdOptions = $this->sdOptions();
         }
 
         $config = $this->getConfig();
 
         $this->addAssets($configName);
+
 
         $context = [
             'singleSrc' => $singleVid,
@@ -228,29 +235,61 @@ class Html5VideoExtension extends SimpleExtension
      * @param $types
      * @return array|string
      */
-    protected function saveDataFile( $filename, $isCDN, $msrc, $types )
+    protected function saveDataFile($filename, $isCDN, $msrc, $types, $fragment)
     {
 
         $fileInfo = pathinfo($this->cdnFile($filename));
         $singlePath = pathinfo($this->videoFile($filename, $isCDN));
 
+        if ($fragment) {
+            $mediaFragment = '#t=' . $this->savedDataFragment($fragment);
+        }
+
         $saveDataFile = [];
 
-        if ($msrc) {
-            $saveDataFile = $this->multipleVids($filename, $isCDN, $msrc, $types );
+        if ($msrc && $isCDN) {
+            foreach ($types as $type => $value) {
+                $saveDataFile += [
+                    $fileInfo['dirname'] . '/' . $fileInfo['filename'] . '.' . $value . $mediaFragment => $value
+                ];
+            }
+        }
+
+
+        if ($msrc && !$isCDN) {
+            foreach ($types as $type => $value) {
+                $saveDataFile += [$singlePath['dirname'] . '/' . $singlePath['filename'] . '.' . $value . $mediaFragment => $value];
+//                $multiVideo[] .= $value;
+            }
         }
 
         if (!$msrc && $isCDN) {
-            $saveDataFile = [ $fileInfo['dirname'] . '/' . $fileInfo['basename']  => $fileInfo['extension'] ]  ;
+            $saveDataFile = [$fileInfo['dirname'] . '/' . $fileInfo['basename'] . $mediaFragment => $fileInfo['extension']];
         }
 
         if (!$msrc && !$isCDN) {
-            $saveDataFile = [ $singlePath['dirname'] . '/' . $singlePath['basename']  => $singlePath['extension'] ] ;
+            $saveDataFile = [$singlePath['dirname'] . '/' . $singlePath['basename'] . $mediaFragment => $singlePath['extension']];
         }
 
-        return $saveDataFile;
+        return json_encode($saveDataFile);
     }
 
+    /**
+     * @param $fragment
+     * @return string
+     */
+    protected function savedDataFragment($fragment)
+    {
+        $mfrag = [];
+
+        foreach ($fragment as $key => $value) {
+            $mfrag[] = $value;
+        }
+
+
+        return implode(',', $mfrag);
+
+    }
     /**
      * @return array
      *
