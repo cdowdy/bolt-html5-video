@@ -18,28 +18,6 @@
     var vidButtons = document.querySelectorAll('.loadVideo');
     var docFrag = document.createDocumentFragment();
 
-    /**
-     *
-     * @param selector
-     * @param attribute
-     * @returns {Array}
-     */
-    var getDataKey = function (selector, attribute) {
-        var source = selector.getAttribute(attribute);
-
-        return Object.keys(JSON.parse(source));
-    };
-
-
-    /**
-     * get the file extension of the filename passed
-     * @param filename
-     * @returns {*}
-     */
-    var getFileExt = function (filename) {
-        return filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2);
-    };
-
 
     /**
      * loop through the data-attributes and add the class using classList
@@ -73,21 +51,25 @@
 
 
     /**
-     * create the video source tag, get the file extension from getFileExt() then append
-     * the source(s) to the docuemnt fragment
      *
-     * @param sources
-     * @param appendNode
+     * @param selector
      */
-    var createVideoSources = function (sources, appendNode) {
-        for (var i = 0; i < sources.length; i++) {
-            var extension = getFileExt(sources[i]);
-            var source = document.createElement('source');
-            source.src = sources[i];
-            source.type = 'video/' + extension;
-            docFrag.appendChild(source);
+    var createVideoSources = function (selector) {
+        var vidData = selector.getAttribute('data-save');
+        var videos = JSON.parse(vidData), key;
+
+        for (key in videos) {
+
+            if (videos.hasOwnProperty(key)) {
+                var source = document.createElement('source');
+                source.src = key;
+                source.type = 'video/' + videos[key];
+                docFrag.appendChild(source);
+            }
+
         }
     };
+
 
 
     /**
@@ -133,13 +115,11 @@
         // create the video element
         var videoElement = document.createElement('video');
 
-        // Get The Keys For Our Sources
-        var videoSource = getDataKey(button, 'data-save');
-
         // Grab All Our Data-Attributes with our data
         var videoID = button.getAttribute('data-id'),
             videoClass = button.getAttribute('data-class'),
             attribs = button.getAttribute('data-attribs'),
+            preload = button.getAttribute('data-preload'),
             widthHeight = button.getAttribute('data-width-height'),
             poster = button.getAttribute('data-poster'),
             tracks = button.getAttribute('data-tracks');
@@ -151,6 +131,9 @@
 
         // set the video ID if it exits
         setVideoAttributes(videoID, videoElement, 'id', videoID);
+
+        // set the preload attribute if it exists
+        setVideoAttributes(preload, videoElement, 'preload', preload);
 
         // set the poster if it exists
         setVideoAttributes(poster, videoElement, 'poster', poster);
@@ -173,8 +156,7 @@
         }
 
         // add and append the video sources to the video element
-        createVideoSources(videoSource, videoElement);
-
+        createVideoSources(button);
 
         // append Video Tracks after sources
         if (tracks) {
