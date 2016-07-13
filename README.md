@@ -296,7 +296,9 @@ This will give you in your rendered page:
 For a deeper dive into WebVTT have a look at the following links:
 
 * [HTML5 Doctor: Video Subtitling and WebVTT](http://html5doctor.com/video-subtitling-and-webvtt/)
-* [Mozilla Developer Network: Introduction to WebVTT](https://developer.mozilla.org/en-US/docs/Web/API/Web_Video_Text_Tracks_Format)
+* [Mozilla Developer Network: Introduction to WebVTT](https://developer.mozilla.org/en-US/docs/Web/API/Web_Video_Text_Tracks_Format)  
+
+Also see the Note on [VTT Mime Type Console Warnings](#gotchas-and-FYI'S)
 
 ## Controlling Start and End Times
 
