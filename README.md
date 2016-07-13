@@ -314,8 +314,8 @@ blogVideos:
  
 ```html
 <video controls preload="metadata">
-  <source src="/files/your-video.webm" type="video/webm#t=5,12" >
-  <source src="/files/your-video.mp4" type="video/mp4#t=5,12" >  
+  <source src="/files/your-video.webm#t=5,12" type="video/webm" >
+  <source src="/files/your-video.mp4#t=5,12" type="video/mp4" >  
 </video>
 ```
 
