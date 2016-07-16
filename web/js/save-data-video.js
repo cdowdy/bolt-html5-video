@@ -147,13 +147,15 @@
         addClass(videoClass, classJSON, videoElement);
 
 
-        if (widthHeight) {
-            for (key in whJSON) {
-                if (whJSON.hasOwnProperty(key)) {
-                    videoElement.setAttribute(key, whJSON[key]);
-                }
-            }
-        }
+        // if (widthHeight) {
+        //     for (key in whJSON) {
+        //         if (whJSON.hasOwnProperty(key)) {
+        //             videoElement.setAttribute('width', whJSON[key]);
+        //         }
+        //     }
+        // }
+        setVideoAttributes(whJSON[0], videoElement, 'width', whJSON[0]);
+        setVideoAttributes(whJSON[1], videoElement, 'height', whJSON[1]);
 
         // add and append the video sources to the video element
         createVideoSources(button);
