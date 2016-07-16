@@ -74,7 +74,7 @@
 # ================================================================================ #}
 
 {% macro vidDimensions( widthHeight ) %}
-{% spaceless %}{% if widthHeight %}{% for key, value in widthHeight %}{{ key }}="{{ value }}"{% endfor %}{% endif %}{% endspaceless %}
+{% spaceless %}{% if widthHeight %}width="{{ widthHeight[0] }}" height="{{ widthHeight[1] }}"{% endif %}{% endspaceless %}
 {% endmacro vidDimensions %}
 
 
