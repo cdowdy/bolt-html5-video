@@ -19,7 +19,7 @@ class Html5VideoExtension extends SimpleExtension
     /**
      * @var string
      */
-    private $_currentSD = 'save-data-video.07-13-2016-12.min.js';
+    private $_currentSD = 'save-data-video.bfbf0fcc.min.js';
     /**
      * @var bool
      */
@@ -44,9 +44,13 @@ class Html5VideoExtension extends SimpleExtension
         ];
     }
 
+
     /**
      * The callback function when {{ html5video() }} is used in a template.
      *
+     * @param $file
+     * @param $name
+     * @param array $options
      * @return string
      */
     public function html5video($file, $name, array $options = array() )
@@ -58,31 +62,37 @@ class Html5VideoExtension extends SimpleExtension
 
         // check for config settings
         $defaultOptions = $this->getOptions($configName);
+        $defaultConfig = $this->getDefaultConfig();
 
+        /*
+         * Merge the options set in either 'default' or named config with the options passed in through the twig template
+         */
         $mergedOptions = array_merge($defaultOptions, $options);
-
-
-        $attributes = $this->combineOptions($configName, $options, 'attributes');
+//        $attributes = $this->combineOptions($configName, $options, 'attributes');
+        $attributes = $this->checkConfig( $mergedOptions, 'attributes', $defaultConfig);
 
         $poster = $mergedOptions['video_poster'];
         $isCDN = $mergedOptions['use_cdn'];
-        $saveData = $mergedOptions['save_data'];
+        $saveData = $this->checkIndex($mergedOptions, 'save_data', FALSE );
         $preload = $mergedOptions['preload'];
-        $widthHeight = $mergedOptions['width_height'];
+        $widthHeight = $this->checkIndex($mergedOptions, 'width_height' , NULL );
         $mediaFragment = $mergedOptions['media_fragment'];
 //        $mediaFragment = (isset($mergedOptions['media_fragment']) ? $mergedOptions['media_fragment'] : null);
         $videoTypes = $mergedOptions['video_types'];
-        $multipleSource = $mergedOptions['multiple_source'];
 
+
+//        $multipleSource = $mergedOptions['multiple_source'];
+        $multipleSource = (isset($mergedOptions['multiple_source']) ? $mergedOptions['multiple_source'] : FALSE);
         $videoID = $mergedOptions['video_id'];
 
         // get tracks if present
         $tracks = $mergedOptions['tracks'];
 
         // class passed through the twig template
-        $templateClass = $options['class'];
+        $templateClass = $this->checkIndex( $options, 'class',  null);
         // classes in the config
-        $classes = $defaultOptions['class'];
+//        $classes = $defaultOptions['class'];
+        $classes = $this->checkIndex( $defaultOptions, 'class', null );
 
         if ( $templateClass && $classes ) {
             $htmlClass = array_merge($classes, $templateClass );
@@ -92,18 +102,25 @@ class Html5VideoExtension extends SimpleExtension
             $htmlClass = $classes;
         }
 
+        if ($multipleSource && empty($videoTypes) ) {
+            $this->multiVidErrors($multipleSource, $videoTypes);
+            $multipleSource = FALSE;
+        }
 
         $multiVideo = $this->multipleVids($file, $isCDN, $multipleSource, $videoTypes);
         $singleVid = $this->videoFile($file, $isCDN);
 
-        isset($multipleSource) ? $multiVideo : $singleVid;
+//        isset($multipleSource) ? $multiVideo : $singleVid;
+
+        $saveDataFile = [];
+        $sdOptions = [];
 
         if ($saveData) {
             $saveDataFile = $this->saveDataFile($file, $isCDN, $multipleSource, $videoTypes, $mediaFragment);
             $sdOptions = $this->sdOptions();
         }
 
-        $config = $this->getConfig();
+//        $config = $this->getConfig();
 
         $this->addAssets($configName);
 
@@ -115,7 +132,7 @@ class Html5VideoExtension extends SimpleExtension
             'sd_file' => $saveDataFile,
             'sdOpt' => $sdOptions,
             'preload' => $preload,
-            'widthHeight' => [ 'width' => $widthHeight[0], 'height' => $widthHeight[1]],
+            'widthHeight' => $widthHeight ,
             'attributes' => $attributes,
             'class' => $htmlClass,
             'video_id' => $videoID,
@@ -129,6 +146,42 @@ class Html5VideoExtension extends SimpleExtension
         ];
 
         return $this->renderTemplate('video.twig', $context);
+    }
+
+
+    /**
+     * @param $configOption
+     * @param $configType
+     * @param $defaultConfig
+     * @return mixed
+     */
+    protected function checkConfig ( $configOption, $configType, $defaultConfig )
+    {
+        return ( isset( $configOption[$configType]) ? $configOption[$configType] : $defaultConfig['default'][$configType] );
+    }
+
+    /**
+     * @param $option
+     * @param $optionType
+     * @param $fallback
+     * @return mixed
+     */
+    protected function checkIndex( $option, $optionType, $fallback )
+    {
+        return ( isset( $option[$optionType]) ? $option[$optionType] : $fallback );
+    }
+
+    /**
+     * @param $msrc
+     * @param $types
+     */
+    protected function multiVidErrors( $msrc, $types ) {
+        $app = $this->getContainer();
+
+        if ($msrc && empty($types ) ) {
+            $app['logger.flash']->error("Bolt HTML5 VIDEO ERROR: You Selected Multiple Sources For Your Video in and Haven't Supplied Any Video Types. Please add In At Least Two Types, ie: webm , mp4,  To the Extensions Config or Template. A Single Source Has Been Used Instead" );
+
+        }
     }
 
     /**
@@ -189,24 +242,34 @@ class Html5VideoExtension extends SimpleExtension
     {
         $cfg = $this->getConfig();
         $configName = $this->getConfigName($config);
+        $defaultConfig = $this->getDefaultConfig();
 
-        $cdn = $cfg[ $configName ][ 'use_cdn' ];
+//        $cdn = isset($cfg[$configName ]['use_cdn']) ;
+        $cdn = $this->checkConfig($cfg[$configName], 'use_cdn', $defaultConfig);
 //        $videoID = $cfg[ $configName ]['video_id'];
-        $saveData = $cfg[ $configName ]['save_data'];
+//        $saveData = $this->checkConfig( $cfg[ $configName ], 'save_data',$defaultConfig) ;
 
-        $attributes = $cfg[ $configName ]['attributes'];
-        $preload = $cfg[ $configName ]['preload'];
-        $widthHeight = $cfg[ $configName ]['width_height'];
-        $poster = $cfg[ $configName ]['video_poster'];
-        $mediaFragment = $this->mediaFragment( $configName );
-        $tracks = $this->vidTracks( $configName );
 
-        $class = $this->getClassID( $configName, 'class');
-        $videoID = $this->getClassID( $configName, 'video_id');
+        $saveData = $this->checkConfig($cfg[$config], 'save_data', $defaultConfig);
 
-        $multiple_source = $cfg[$configName]['multiple_source'];
+//        $attributes = $cfg[ $configName ]['attributes'];
+        $attributes = $this->checkConfig($cfg[$configName], 'attributes', $defaultConfig);
+        $preload = $this->checkConfig($cfg[$configName], 'preload', $defaultConfig);
+        $widthHeight = $this->checkIndex($cfg[$configName], 'width_height', NULL );
 
-        $videoTypes = $cfg[ $configName ]['video_types'];
+
+
+
+        $poster = $this->checkIndex($cfg[$configName], 'video_poster', null);
+        $mediaFragment = $this->mediaFragment($configName);
+        $tracks = $this->vidTracks($configName);
+
+        $class = $this->getClassID($configName, 'class');
+        $videoID = $this->getClassID($configName, 'video_id');
+
+        $multiple_source = $this->checkConfig($cfg[$configName], 'multiple_source', $defaultConfig);
+
+        $videoTypes = $this->checkIndex($cfg[$configName], 'video_types', null);
 
         $defaults = [
             'use_cdn' => $cdn,
@@ -233,14 +296,15 @@ class Html5VideoExtension extends SimpleExtension
      * @param $isCDN
      * @param $msrc
      * @param $types
-     * @return array|string
+     * @param $fragment
+     * @return string
      */
     protected function saveDataFile($filename, $isCDN, $msrc, $types, $fragment)
     {
 
         $fileInfo = pathinfo($this->cdnFile($filename));
         $singlePath = pathinfo($this->videoFile($filename, $isCDN));
-
+        $mediaFragment = '';
         if ($fragment) {
             $mediaFragment = '#t=' . $this->savedDataFragment($fragment);
         }
@@ -259,7 +323,6 @@ class Html5VideoExtension extends SimpleExtension
         if ($msrc && !$isCDN) {
             foreach ($types as $type => $value) {
                 $saveDataFile += [$singlePath['dirname'] . '/' . $singlePath['filename'] . '.' . $value . $mediaFragment => $value];
-//                $multiVideo[] .= $value;
             }
         }
 
@@ -325,11 +388,11 @@ class Html5VideoExtension extends SimpleExtension
      * @param $option
      * @return array|mixed
      */
-    public function combineOptions( $config, $options = array(), $option ) {
+    protected function combineOptions( $config, $options = array(), $option ) {
         $configName = $this->getConfigName($config);
         $defaultOptions = $this->getOptions($configName);
 
-        if ($options[$option]) {
+        if (isset($options[$option])) {
             $combined = array_merge($defaultOptions[ $option ], $options[ $option ]);
         } else {
             $combined = $defaultOptions[$option];
@@ -337,6 +400,7 @@ class Html5VideoExtension extends SimpleExtension
 
         return $combined;
     }
+
 
 
     /**
@@ -469,7 +533,8 @@ class Html5VideoExtension extends SimpleExtension
         $config = $this->getConfig();
         $configName = $this->getConfigName( $cfg );
 
-        $trackConfig = $config[ $configName ]['tracks'];
+//        $trackConfig = $config[ $configName ]['tracks'];
+        $trackConfig = $this->checkIndex( $config[$configName], 'tracks', NULL);
 
         return $trackConfig;
     }
@@ -509,16 +574,17 @@ class Html5VideoExtension extends SimpleExtension
      * and stop the insertion of the files multiple times because bolt's registerAssets method will blindly insert
      * the files on every page
      *
+     * @param $cfg
      */
-
     protected function addAssets($cfg)
     {
         $app = $this->getContainer();
 
         $config = $this->getConfig();
         $configName = $this->getConfigName( $cfg );
+        $defaultConfig = $this->getDefaultConfig();
 
-        $saveData = $config[$configName]['save_data'];
+        $saveData = $this->checkConfig( $config[$configName], 'save_data', $defaultConfig );
 
         $extPath = $app['resources']->getUrl('extensions');
 
@@ -545,6 +611,22 @@ SD;
                 $this->_scriptAdded = TRUE;
             }
         }
+    }
+
+    /**
+     * @return array
+     */
+    protected function getDefaultConfig()
+    {
+        return [
+            'default' => [
+                'use_cdn' => false,
+                'save_data' => false,
+                'attributes' => [ 'controls' ],
+                'preload' => 'metadata',
+                'multiple_source' => false,
+            ]
+        ];
     }
 
 }
