@@ -512,7 +512,7 @@ Then in your template use an ``if/else`` statement similar to the one below:
 1. The video files should be the same name. When using multiple sources the filename will be appended with the types you provide in ``video_types``
 2. If uploading through the contenttypes record edit/creation page you should use the filelist type instead of the file type  
 
-3. If you get a Server Error of ``Resource interpreted as TextTrack but transferred with MIME type text/plain:`` when including text tracks (vtt files) you need to add the correct mime type for your server:  
+3. If you get a Console Error of ``Resource interpreted as TextTrack but transferred with MIME type text/plain:`` when including text tracks (vtt files) you need to add the correct mime type for your server:  
   * Apache:  
    ```  
    <IfModule mod_mime.c>
