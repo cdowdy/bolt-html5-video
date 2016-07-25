@@ -525,4 +525,6 @@ Then in your template use an ``if/else`` statement similar to the one below:
    #others here
        text/vtt                              vtt;
    }  
-   ```
+   ```  
+   
+4. When using a CDN and if your site is using HTTPS and you have have ``enforce_ssl: true`` in your Bolt main config file then this extension will prefix your CDN url with HTTPS to prevent Mixed Content which most browsers now will block. This may cause issues if your CDN doesn't offer HTTPS or you haven't enabled it through your CDN. If this does cause to many issues please file a bug and I'll think about removing this portion of the extension if the reasons to do so are valid and extensive enough. 
