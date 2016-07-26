@@ -21,7 +21,7 @@ save_data_options:
 # * save_data: true | false check for the save-data client hint header and don't load videos unless the user wants to.
 # * video_id: gives the containing element an ID as a hook for styling :( or JavaScript :)
 # * class: CSS class
-# * attributes: [ 'autoplay', 'controls', 'muted', 'loop' ] # dont use autplay please :)
+# * attributes: [ 'autoplay', 'controls', 'muted', 'loop', 'playsinline' ] # dont use autplay please :)
 # * preload: 'metadata' # options are metadata | auto | none
 # * width_height: [ 400, 400 ] # the width and height of the video element if you have one... optional
 # * multiple_source: use HTML5 source attributes to serve multiple sources ie. webm, mp4
