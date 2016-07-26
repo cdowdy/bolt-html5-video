@@ -168,7 +168,7 @@ This will produce in the rendered HTML
 </video>
 ```  
 
-## Video Attributes  
+## Video Attributes {#video-attributes}
 Video attributes are boolean. If you want them you add them to the config array. Options are:  
 
 * autoplay - immediately play the video as soon as it can  
