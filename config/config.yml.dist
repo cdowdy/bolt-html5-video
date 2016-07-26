@@ -18,7 +18,7 @@ save_data_options:
 
 # breakdown of options available to use:
 # * use_cdn: [true | false ] this defaults to false
-# * save_data: true | false check for the save-data client hint header and don't load videos unless the user wants to. CURRENTLY NOT AVAILABLE :(
+# * save_data: true | false check for the save-data client hint header and don't load videos unless the user wants to.
 # * video_id: gives the containing element an ID as a hook for styling :( or JavaScript :)
 # * class: CSS class
 # * attributes: [ 'autoplay', 'controls', 'muted', 'loop' ] # dont use autplay please :)
