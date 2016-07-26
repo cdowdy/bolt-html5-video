@@ -167,6 +167,36 @@ This will produce in the rendered HTML
 </video>
 ```  
 
+## Video Attributes  
+Video attributes are boolean. If you want them you add them to the config array. Options are:  
+
+* autoplay - immediately play the video as soon as it can  
+* controls - give the user playback controls ie: play, pause, seek 
+* muted    
+* loop - continuously loop the video. Much like gif's. 
+
+And since iOS is a snowflake and all snowflakes are unique :) you can also add:  
+
+* playsinline  
+
+which is telling iOS Safari 10+ that you want to play the video "inline" in the document by default, within the dimensions set by the video element, instead of being displayed fullscreen or in an independent resizable window.  
+
+example with all Attributes:  
+
+```yaml
+blogVideos:
+  attributes: [ 'autoplay', 'controls', 'muted', 'loop', 'playsinline'  ]
+```  
+
+HTML output:  
+
+```html
+<video autoplay controls muted loop playsinline>
+  <source src="/files/your=file.webm" type="video/webm" >
+  <source src="/files/your=file.mp4" type="video/mp4" >
+</video>
+```  
+
 ## Adding Width's and Heights  
 When adding width and heights the format is as follows:  
 
