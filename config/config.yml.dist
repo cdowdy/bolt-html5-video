@@ -34,6 +34,7 @@ save_data_options:
 # ================================================================================= #
 #default:
 #  use_cdn: true
+#  save_data: true
 #  video_id: blogVideo
 #  class: ['class-one']
 #  attributes: [ 'autoplay', 'controls', 'muted', 'loop' ]
