@@ -22,6 +22,7 @@ Has current support for:
     * controls
     * muted
     * loop
+    * playsinline - this is used particularly for ios 10 
   * preload options - metadata | auto | none
   * video posters
   * video width and height
