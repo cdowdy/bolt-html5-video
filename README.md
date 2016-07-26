@@ -7,6 +7,7 @@ Quick Navigation:
 * [Extension Set Up](#set-up)
 * [ Quick Usage With Defaults ](#quick-usage-with-defaults)
 * [Using Your Own CDN](#using-your-own-cdn)
+* [Adding Video Attributes](#video-attributes)
 * [Controlling Number of Video Sources](#controlling-video-sources)
 * [Adding Tracks and Subtitles](#adding-tracks-and-subtitles)
 * [Controlling Start and End Times](#controlling-start-and-end-times)
