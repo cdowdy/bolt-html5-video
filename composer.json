@@ -45,6 +45,6 @@
   "extra": {
     "bolt-assets": "web",
     "bolt-class": "Bolt\\Extension\\cdowdy\\html5video\\Html5VideoExtension",
-    "bolt-icon": "screenshots/html5-video-icon-1.svg"
+    "bolt-icon": "screenshots/html5-videos-icon-1.svg"
   }
 }
