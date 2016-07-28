@@ -1,10 +1,20 @@
 {
   "name": "cdowdy/bolt-html5-video",
-  "description": "A Bolt Extension to Add HTML5 Video Field and Twig Function.",
+  "description": "A Bolt Extension to Add Local or CDN HTML5 Videos or Webm/Mp4 for gif like animations.",
   "type": "bolt-extension",
   "keywords": [
     "html5 video",
-    "Save-Data Header"
+    "Save-Data Header",
+    "Client Hints",
+    "webm",
+    "mp4",
+    "gif",
+    "gifs",
+    "webm for gifs",
+    "mp4 for gifs",
+    "ogg",
+    "local videos",
+    "cdn hosted videos"
   ],
   "require": {
     "bolt/bolt": "^3.0"
@@ -34,6 +44,7 @@
   },
   "extra": {
     "bolt-assets": "web",
-    "bolt-class": "Bolt\\Extension\\cdowdy\\html5video\\Html5VideoExtension"
+    "bolt-class": "Bolt\\Extension\\cdowdy\\html5video\\Html5VideoExtension",
+    "bolt-icon": "screenshots/html5-video-icon-1.svg"
   }
 }
