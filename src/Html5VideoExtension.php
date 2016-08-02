@@ -39,6 +39,7 @@ class Html5VideoExtension extends SimpleExtension
     protected function registerTwigFunctions()
     {
         $options = ['is_safe' => ['html']];
+        $this->getConfig();
         return [
             'html5video' => [ 'html5video', $options ],
         ];
