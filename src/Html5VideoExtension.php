@@ -123,7 +123,7 @@ class Html5VideoExtension extends SimpleExtension
 
 //        $config = $this->getConfig();
 
-        $this->addAssets($configName);
+        $this->addAssets($configName, $saveData);
 
 
         $context = [
@@ -586,7 +586,7 @@ class Html5VideoExtension extends SimpleExtension
      *
      * @param $cfg
      */
-    protected function addAssets($cfg)
+    protected function addAssets($cfg, $saveData )
     {
         $app = $this->getContainer();
 
@@ -594,7 +594,7 @@ class Html5VideoExtension extends SimpleExtension
         $configName = $this->getConfigName( $cfg );
         $defaultConfig = $this->getDefaultConfig();
 
-        $saveData = $this->checkConfig( $config[$configName], 'save_data', $defaultConfig );
+//        $saveData = $this->checkConfig( $config[$configName], 'save_data', $defaultConfig );
 
         $extPath = $app['resources']->getUrl('extensions');
 
