@@ -1,5 +1,5 @@
 {
-  "name": "cdowdy/bolt-html5-video",
+  "name": "cdowdy/html5video",
   "description": "A Bolt Extension to Add Local or CDN HTML5 Videos or Webm/Mp4 for gif like animations.",
   "type": "bolt-extension",
   "keywords": [
