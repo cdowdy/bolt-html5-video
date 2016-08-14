@@ -52,13 +52,13 @@ class Html5VideoExtension extends SimpleExtension
      */
 //    protected function registerAssets()
 //    {
-////        $backendAsset = new JavaScript('js/html5-video-field.js');
-////        $backendAsset->setZone(Zone::BACKEND);
-////        return [
-////            $backendAsset
-////        ];
+//        $backendAsset = new JavaScript('js/html5-video-field.js');
+//        $backendAsset->setZone(Zone::BACKEND);
 //        return [
-//            (new JavaScript('js/html5-video-field.js'))->setZone(Zone::BACKEND)
+//            $backendAsset
+//        ];
+//        return [
+//            (new JavaScript('js/html5-video-field.js'))->setLate('true')->setZone(Zone::BACKEND)
 //        ];
 //    }
 
@@ -513,6 +513,10 @@ class Html5VideoExtension extends SimpleExtension
     protected function cdnFile($filename)
     {
         $confg = $this->getConfig();
+
+        if (is_array($filename)) {
+            $filename = isset($filename['filename']) ? $filename['filename'] : $filename['file'];
+        }
 
 //        $useCDN = $options['use_cdn'];
 
