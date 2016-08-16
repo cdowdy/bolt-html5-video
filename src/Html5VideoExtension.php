@@ -21,7 +21,7 @@ class Html5VideoExtension extends SimpleExtension
     /**
      * @var string
      */
-    private $_currentSD = 'save-data-video.bfbf0fcc.min.js';
+    private $_currentSD = 'save-data-video.2cd6b5ea.min.js';
     /**
      * @var bool
      */
@@ -407,6 +407,8 @@ class Html5VideoExtension extends SimpleExtension
 
         $message = $sdConfig['message'];
         $messageClass = $sdConfig['message_class'];
+        $usePoster = $sdConfig['use_poster'];
+        $posterClass = $sdConfig['img_placeholder_class'];
         $buttonClass = $sdConfig['button_class'];
         $wrapDiv = $sdConfig['wrapping_div'];
         $divClass = $sdConfig['wrapping_div_class'];
@@ -415,6 +417,8 @@ class Html5VideoExtension extends SimpleExtension
         return $sdOptions = [
             'message' => $message,
             'message_class' => $messageClass,
+            'use_poster' => $usePoster,
+            'img_placeholder_class' => $posterClass,
             'button_class' => $buttonClass,
             'wrapping_div' => $wrapDiv,
             'wrapping_div_class' => $divClass
