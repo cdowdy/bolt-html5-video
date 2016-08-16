@@ -411,14 +411,16 @@ Currently these browsers will advertise this header:
 * Opera 
 * Yandex  
 
-For more information on how a user can enable data-saving in chrome for Android or iOS, or through desktop Chrome see [Reduce Data Usage in Chrome](https://developer.chrome.com/multidevice/data-compression)
+For more information on how a user can enable data-saving in Chrome for Android or iOS, or through desktop Chrome see [Reduce Data Usage in Chrome](https://developer.chrome.com/multidevice/data-compression)
 
-With this option set a message and a button will be rendered instead of downloading and rendering the video. You can control the message that is delivered to the user, CSS styles for both the message and button.  
+With this option set a message and a button will be rendered instead of downloading and rendering the video. You can control the message that is delivered to the user, CSS styles for both the message, poster-image placeholder and/or button.  
  
 ```yaml  
 save_data_options:  
-  message: 'The Save Data Header is Present. To Play and Load the Video click the button below.'
-  message_class: [ 'your-paragraph', 'classes' ]
+  message: 'The Save Data Header is Present. To Play and Load the Video click the image or button below.'
+  message_class: [ 'your-paragraph', 'classes' ]  
+  use_poster: true
+  img_placeholder_class: []
   button_class: [ 'button' , 'primary' ]
   wrapping_div: true
   wrapping_div_class: [ 'class', 'that-wraps', 'the-paragraph-and-button' ]  
@@ -431,13 +433,21 @@ With these set here is how it will look instead of a video.
   <p class="your-paragraph classes">
    The Save Data Header is Present. To Play and Load the Video click the button below.
   </p>  
+  <!-- if using a poster placeholder an image will be used -->
+  <img src="poster-img.png" 
+        class=" whatever classes are in img_placeholder_class" 
+        alt="click to load video"
+        width="video-width"
+        height="video-height" 
+        <!-- video data here --> />
+  <!-- if no poster a button will be used -->
   <button class="button primary"  
         <!-- video data here --> >Load Video</button>  
 </div>        
 ```  
 Here is how it would look on the page and clicking through the buttons.  
 
-![Save Data Enabled and Clicking load video button to load the video](https://raw.githubusercontent.com/cdowdy/bolt-html5-video/master/screenshots/save-data-enabled.gif)
+![Save Data Enabled and Clicking load video button to load the video](https://raw.githubusercontent.com/cdowdy/bolt-html5-video/master/screenshots/save-data-enabled-placehold.gif)
 
 ## Uploading Video Files
 
