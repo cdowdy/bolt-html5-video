@@ -148,11 +148,15 @@
 
 
         if (widthHeight) {
+            //     for (key in whJSON) {
+            //         if (whJSON.hasOwnProperty(key)) {
+            //             videoElement.setAttribute('width', whJSON[key]);
+            //         }
+            //     }
+            // }
             setVideoAttributes(whJSON[0], videoElement, 'width', whJSON[0]);
             setVideoAttributes(whJSON[1], videoElement, 'height', whJSON[1]);
         }
-
-
         // add and append the video sources to the video element
         createVideoSources(button);
 
@@ -163,11 +167,33 @@
 
         videoElement.appendChild(docFrag);
         // insert the video
-        buttonParent.appendChild(videoElement);
+        // buttonParent.appendChild(videoElement);
 
         // button.classList.add('button-clicked');
         button.setAttribute('hidden', '');
         button.setAttribute('style', 'display:none');
+
+        /**
+         * check if the parent of our event (button in this instance)
+         * has the attribute of 'data-hide'. If it does that means we are using an image
+         * instead of a button and it's wrapped in an anchor tag.
+         * we will insert the video element after the anchor tag generated in our template.
+         *
+         * Then we set the button parents attributes to hidden and display:none for sites who have set
+         * a display style for that element in css.
+         *
+         */
+        // if (buttonParent.hasAttribute("data-hide") ) {
+        //     buttonParent.parentNode.insertBefore(videoElement, buttonParent.nextSibling);
+        //     buttonParent.setAttribute('hidden', "");
+        //     buttonParent.previousElementSibling.setAttribute('hidden', '');
+        //     buttonParent.setAttribute('style', 'display:none');
+        // } else {
+        //     // if no data-hide is found it's a normal button
+        //     buttonParent.appendChild(videoElement);
+        //     button.previousElementSibling.setAttribute('hidden', '');
+        // }
+        buttonParent.appendChild(videoElement);
         button.previousElementSibling.setAttribute('hidden', '');
 
     };
@@ -181,7 +207,9 @@
     var eventHandler = function (event) {
         // on the button click defined in 'buttonClass'
         // create and insert the video.
+        event.preventDefault();
         createVid(event);
+
 
     };
 

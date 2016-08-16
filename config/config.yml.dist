@@ -11,6 +11,8 @@ cdn_url:
 save_data_options:
   message: 'The Save Data Header is Present. To Play and Load the Video click the button below.'
   message_class: [ ]         # class to add to the paragraph tag with the message from above
+  use_poster: true            # use the poster you have defined in your config inplace of a button
+  img_placeholder_class: []  # classes used to style images
   button_class: [ ]           # class to add to buttons for your sites styles.
   wrapping_div: false         # true or false. if true a div will contain both the button and paragraph tags from above
   wrapping_div_class: [ ]    # class for wrapping div if set to true
@@ -51,8 +53,22 @@ default:
   video_types: [ 'webm', 'mp4' ]
 
 
+# --------------------------------------------------------------------------------- #
+# Example of using a video as a gif-like animation.
+# 1. Controls are added so a person can stop and start - not needed but "nice to have"
+# 2. Autoplay, muted  are set so mobile devices will automatically play the video - chrome 52+ iOs 10+
+# 3. loop is set to loop the video like a gif
+# 4. playsinline is set so it plays within the page for iOs instead of fullscreen see: https://webkit.org/blog/6784/new-video-policies-for-ios/
+# --------------------------------------------------------------------------------- #
 
-test:
+gifLike:
+  attributes: [ 'controls', 'autoplay', 'muted', 'loop', 'playsinline' ]
+  width_height: [ 400, '100%' ]
+  multiple_source: true
+  video_types: [ 'webm', 'mp4']
+
+
+fullExample:
   use_cdn: false
   class: [ 'test-class' ]
   video_id: 'testID'
