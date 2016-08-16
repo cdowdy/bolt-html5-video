@@ -11,6 +11,8 @@ cdn_url:
 save_data_options:
   message: 'The Save Data Header is Present. To Play and Load the Video click the button below.'
   message_class: [ ]         # class to add to the paragraph tag with the message from above
+  use_poster: true            # use the poster you have defined in your config inplace of a button
+  img_placeholder_class: []  # classes used to style images
   button_class: [ ]           # class to add to buttons for your sites styles.
   wrapping_div: false         # true or false. if true a div will contain both the button and paragraph tags from above
   wrapping_div_class: [ ]    # class for wrapping div if set to true
