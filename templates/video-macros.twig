@@ -142,30 +142,38 @@
     {% endif %}
 {% endmacro savedTracks %}
 
+{% macro sdData_Attribs(class, widthHeight, tracks, attributes, video_id, poster, preload, sd_file) %}
+    {% import _self as attribs %}
+{% if video_id %}data-id="{{ video_id }}"{% endif %}
+{% if class %}data-class='[ {{ attribs.savedClasses( class) }} ]'{% endif %}
+{% if poster %}data-poster="{{ poster }}"{% endif %}
+{% if widthHeight %}data-width-height='{{ attribs.savedwidthHeight(widthHeight) }}'{% endif %}
+{% if tracks %}data-tracks='{{ attribs.savedTracks(tracks) }}'{% endif %}
+{% if preload %}data-preload="{{ preload }}"{% endif %}
+data-attribs='[ {{ attribs.savedAttrib( attributes) }} ]'
+data-save='{{ sd_file }}'
+{% endmacro sdData_Attribs %}
 
 {% macro saveData( save_data, multiSrc, video_types, multiVid, sd_file, sdOpt, video_id, class, attributes, preload, poster, widthHeight, tracks , fragment ) %}
-
-
     {% import _self as at %}
-
-
     {% if sdOpt.wrapping_div %}
         <div {% if sdOpt.wrapping_div_class %}class="{% for c in sdOpt.wrapping_div_class %}{{ c }} {% endfor %}"{% endif %}>
     {% endif %}
 
     <p {% if sdOpt.message_class %}class="save-data {% for c in sdOpt.message_class %}{{ c }} {% endfor %}"{% endif %}>{% if sdOpt.message %}{{ sdOpt.message }}{% else %}Save Data Header is Present. To Play Video click the video button below.{% endif %}
     </p>
+    {% if sdOpt.use_poster and poster %}
+            <img class="loadVideo {% if sdOpt.img_placeholder_class %}{% for c in sdOpt.img_placeholder_class %}{{ c }} {% endfor %}{% endif %}"
+                 src="{{ poster }}"
+                 alt="click to load video"
+                 {{ at.vidDimensions( widthHeight ) }}
+                 style="cursor: pointer;"
+                 {{ at.sdData_Attribs(class, widthHeight, tracks, attributes, video_id, poster, preload, sd_file) }}
+            >
+            {% else %}
 
-    <button class="loadVideo {% if sdOpt.button_class %}{% for c in sdOpt.button_class %}{{ c }} {% endfor %}{% endif %}"
-            {% if video_id %}data-id="{{ video_id }}"{% endif %}
-            {% if class %}data-class='[ {{ at.savedClasses( class) }} ]'{% endif %}
-            {% if poster %}data-poster="{{ poster }}"{% endif %}
-            {% if widthHeight %}data-width-height='{{ at.savedwidthHeight(widthHeight) }}'{% endif %}
-            {% if tracks %}data-tracks='{{ at.savedTracks(tracks) }}'{% endif %}
-            {% if preload %}data-preload="{{ preload }}"{% endif %}
-            data-attribs='[ {{ at.savedAttrib( attributes) }} ]'
-            data-save='{{ sd_file }}'
-    >Load Video</button>
+    <button class="loadVideo {% if sdOpt.button_class %}{% for c in sdOpt.button_class %}{{ c }} {% endfor %}{% endif %}" {{ at.sdData_Attribs(class, widthHeight, tracks, attributes, video_id, poster, preload, sd_file) }} >Load Video</button>
+            {% endif %}
     {% if sdOpt.wrapping_div %}
         </div>
     {% endif %}
