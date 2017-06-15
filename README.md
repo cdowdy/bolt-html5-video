@@ -33,7 +33,23 @@ Has current support for:
   * Tracks & subtitles
   * Media Fragments (currently only 't' or the time)
   * single or multiple video sources
+  
+  
+## NOTICE:  
+a recent change to Bolt may strip certain tags from the rendered output. You'll need to add these to your Bolt Config. [Here is the relevant section in the config](https://github.com/bolt/bolt/blob/868e36f2961a98745131c1f0b2b13f711deb6345/app/config/config.yml.dist#L221-L223)  
 
+```html 
+htmlcleaner:
+  allowed_tags: [video, source, track, ... other tags ]
+```   
+
+You'll also need to allow these attributes so the too will not be removed:    
+
+```html 
+htmlcleaner:
+  allowed_tags: [video, source, track, ... other tags ]  
+  allowed_attributes: [ preload, controls, muted, autoplay, playsinline, loop, poster, type, label, kind, srclang, .. other attributes here  ]
+``` 
 
 ## Set Up
 
