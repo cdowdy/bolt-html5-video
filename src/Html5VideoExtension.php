@@ -2,11 +2,9 @@
 
 namespace Bolt\Extension\cdowdy\html5video;
 
-use Bolt\Asset\File\JavaScript;
 use Bolt\Asset\Snippet\Snippet;
 use Bolt\Asset\Target;
 use Bolt\Controller\Zone;
-use Bolt\Extension\cdowdy\html5video\Field\HTML5VideoField;
 use Bolt\Extension\SimpleExtension;
 use Bolt\Library as Lib;
 
@@ -27,40 +25,17 @@ class Html5VideoExtension extends SimpleExtension
      */
     private $_scriptAdded = FALSE;
 
-//    public function registerFields()
-//    {
-//        return [
-//            new HTML5VideoField(),
-//        ];
-//    }
+
 
     /**
      * {@inheritdoc}
      */
-//    protected function registerTwigPaths()
-//    {
-//        return [
-//            'templates' => [
-//                'position' => 'prepend',
-//                'namespace' => 'bolt'
-//            ]
-//        ];
-//    }
+    protected function registerTwigPaths()
+    {
+        return [ 'templates' ];
+    }
 
-    /**
-     * {@inheritdoc}
-     */
-//    protected function registerAssets()
-//    {
-//        $backendAsset = new JavaScript('js/html5-video-field.js');
-//        $backendAsset->setZone(Zone::BACKEND);
-//        return [
-//            $backendAsset
-//        ];
-//        return [
-//            (new JavaScript('js/html5-video-field.js'))->setLate('true')->setZone(Zone::BACKEND)
-//        ];
-//    }
+
 
     /**
      * {@inheritdoc}
