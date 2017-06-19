@@ -57,7 +57,7 @@ class Html5VideoExtension extends SimpleExtension {
 	 *
 	 * @return string
 	 */
-	public function html5video( $file, $name, array $options = array() )
+	public function html5video( $file, $name = 'default', array $options = array() )
 	{
 
 
