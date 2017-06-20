@@ -39,7 +39,7 @@ class Html5VideoExtension extends SimpleExtension {
 	 */
 	protected function registerTwigFunctions()
 	{
-		$options = [ 'is_safe' => [ 'html' ] ];
+		$options = [ 'is_safe' => [ 'html' ], 'safe' => true  ];
 		$this->getConfig();
 
 		return [
