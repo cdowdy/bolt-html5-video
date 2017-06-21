@@ -472,6 +472,7 @@ class Html5VideoExtension extends SimpleExtension {
 	public function videoFile( $filename, $cdn )
 	{
 		$app = $this->getContainer();
+		$filePath = $app['resources']->getUrl('files');
 
 		if ( is_array( $filename ) ) {
 			$filename = isset( $filename['filename'] ) ? $filename['filename'] : $filename['file'];
@@ -480,11 +481,7 @@ class Html5VideoExtension extends SimpleExtension {
 		if ( $cdn ) {
 			$video = $this->cdnFile( $filename );
 		} else {
-			$video = sprintf(
-				'%sfiles/%s',
-				$app['paths']['root'],
-				Lib::safeFilename( $filename )
-			);
+			$video = $filePath . $filename ;
 		}
 
 		return $video;
