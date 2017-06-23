@@ -5,6 +5,7 @@ namespace Bolt\Extension\cdowdy\html5video;
 use Bolt\Asset\Snippet\Snippet;
 use Bolt\Asset\Target;
 use Bolt\Controller\Zone;
+use Bolt\Extension\cdowdy\html5video\Provider\HTML5FieldProvider;
 use Bolt\Extension\SimpleExtension;
 use Bolt\Library as Lib;
 
@@ -44,6 +45,14 @@ class Html5VideoExtension extends SimpleExtension {
 
 		return [
 			'html5video' => [ 'html5video', $options ],
+		];
+	}
+
+	public function getServiceProviders()
+	{
+		return [
+			$this,
+			new HTML5FieldProvider()
 		];
 	}
 
@@ -485,6 +494,40 @@ class Html5VideoExtension extends SimpleExtension {
 		}
 
 		return $video;
+	}
+
+
+	/**
+	 * Our custom field gives us a json encoded array. Here we'll decode that and set the bool for associative
+	 * array to true.
+	 * Then check to see if the filename is in fact an array. If it's not it came in as a string from a template
+	 * or a contentType editor.
+	 * @param $filename
+	 *
+	 * @return array
+	 */
+	protected function createVideoSrcArray( $filename )
+	{
+		$app      = $this->getContainer();
+		$filePath = $app['resources']->getUrl( 'files' );
+		$file     = json_decode( $filename, true );
+
+		$videoFile = [];
+
+		if ( is_array( $filename ) ) {
+
+			foreach ( $file as $key => $value ) {
+				$videoFile += [ $key => $filePath . $value['filename'] ];
+			}
+
+		} else {
+			// this is a "string" passed in from the template. It doesn't come from our HTML5 video custom field
+			// Like: {{ html5video( 'sw_crit_fixed.webm', 'default' ) }}
+			$videoFile[] = $filePath . $filename;
+		}
+
+
+		return $videoFile;
 	}
 
 	/**
