@@ -11,8 +11,6 @@ cdn_url:
 # * attributes: [ 'autoplay', 'controls', 'muted', 'loop', 'playsinline' ] # dont use autplay please :)
 # * preload: 'metadata' # options are metadata | auto | none
 # * width_height: [ 400, 400 ] # the width and height of the video element if you have one... optional
-# * multiple_source: use HTML5 source attributes to serve multiple sources ie. webm, mp4
-# * video_types: [ 'webm', 'mp4', 'ogg'] which types you want to use. webm mp4 should cover most modern browsers Only needed if multiple_source is true
 # * media_fragment: [ start_time, end_time ] to play a specific portion of the video see: http://www.html5rocks.com/en/tutorials/video/basics/#toc-markup
 
 
@@ -26,15 +24,12 @@ cdn_url:
 #  attributes: [ 'autoplay', 'controls', 'muted', 'loop' ]
 #  preload: 'metadata'
 #  width_height: [ 400, 400 ]
-#  multiple_source: true
 #  media_fragment: [10, 60 ]
 
 default:
   use_cdn: false
   attributes: [ 'controls']
   preload: 'metadata'
-  multiple_source: true
-  video_types: [ 'webm', 'mp4' ]
 
 
 # --------------------------------------------------------------------------------- #
@@ -48,8 +43,6 @@ default:
 gifLike:
   attributes: [ 'controls', 'autoplay', 'muted', 'loop', 'playsinline' ]
   width_height: [ 400, '100%' ]
-  multiple_source: true
-  video_types: [ 'webm', 'mp4']
 
 
 fullExample:
@@ -60,8 +53,6 @@ fullExample:
   attributes: [ 'controls']
   preload: 'metadata'
   width_height: [ 400, 400 ] # the width and height of the video element if you have one... optional
-  multiple_source: true
-  video_types: [ 'webm', 'mp4' ]
   tracks:
     en_subtitles:
       kind: 'subtitles'
