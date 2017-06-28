@@ -83,12 +83,8 @@ class Html5VideoExtension extends SimpleExtension {
 		$preload       = $mergedOptions['preload'];
 		$widthHeight   = $this->checkIndex( $mergedOptions, 'width_height', null );
 		$mediaFragment = $mergedOptions['media_fragment'];
-//        $mediaFragment = (isset($mergedOptions['media_fragment']) ? $mergedOptions['media_fragment'] : null);
-		$videoTypes = $mergedOptions['video_types'];
 
 
-//        $multipleSource = $mergedOptions['multiple_source'];
-		$multipleSource = ( isset( $mergedOptions['multiple_source'] ) ? $mergedOptions['multiple_source'] : false );
 		$videoID        = $mergedOptions['video_id'];
 
 		// get tracks if present
@@ -108,21 +104,8 @@ class Html5VideoExtension extends SimpleExtension {
 			$htmlClass = $classes;
 		}
 
-		if ( $multipleSource && empty( $videoTypes ) ) {
-			$this->multiVidErrors( $multipleSource, $videoTypes );
-			$multipleSource = false;
-		}
 
-		$multiVideo = $this->multipleVids( $file, $isCDN, $multipleSource, $videoTypes );
 		$singleVid  = $this->videoFile( $file, $isCDN );
-
-//        isset($multipleSource) ? $multiVideo : $singleVid;
-
-
-
-//        $config = $this->getConfig();
-
-
 
 		$context = [
 			'singleSrc'   => $singleVid,
@@ -134,10 +117,6 @@ class Html5VideoExtension extends SimpleExtension {
 			'video_id'    => $videoID,
 			'is_cdn'      => $isCDN,
 			'tracks'      => $tracks,
-
-			'multiSrc'    => $multipleSource,
-			'multiVid'    => $multiVideo,
-			'video_types' => $videoTypes,
 			'fragment'    => $mediaFragment
 		];
 
@@ -168,21 +147,6 @@ class Html5VideoExtension extends SimpleExtension {
 	{
 		return ( isset( $option[ $optionType ] ) ? $option[ $optionType ] : $fallback );
 	}
-
-	/**
-	 * @param $msrc
-	 * @param $types
-	 */
-	protected function multiVidErrors( $msrc, $types )
-	{
-		$app = $this->getContainer();
-
-		if ( $msrc && empty( $types ) ) {
-			$app['logger.flash']->error( "Bolt HTML5 VIDEO ERROR: You Selected Multiple Sources For Your Video in and Haven't Supplied Any Video Types. Please add In At Least Two Types, ie: webm , mp4,  To the Extensions Config or Template. A Single Source Has Been Used Instead" );
-
-		}
-	}
-
 
 
 	/**
@@ -265,17 +229,13 @@ class Html5VideoExtension extends SimpleExtension {
 		$class   = $this->getClassID( $configName, 'class' );
 		$videoID = $this->getClassID( $configName, 'video_id' );
 
-		$multiple_source = $this->checkConfig( $cfg[ $configName ], 'multiple_source', $defaultConfig );
 
-		$videoTypes = $this->checkIndex( $cfg[ $configName ], 'video_types', null );
 
 		$defaults = [
 			'use_cdn'         => $cdn,
 			'video_id'        => $videoID,
 			'class'           => $class,
 //            'video_id' => $id,
-			'multiple_source' => $multiple_source,
-			'video_types'     => $videoTypes,
 			'attributes'      => $attributes,
 			'preload'         => $preload,
 			'width_height'    => $widthHeight,
@@ -435,40 +395,6 @@ class Html5VideoExtension extends SimpleExtension {
 		return $video;
 	}
 
-	/**
-	 * @param $filename
-	 * @param $isCDN
-	 * @param $msrc
-	 * @param $types
-	 *
-	 * @return array
-	 */
-	protected function multipleVids( $filename, $isCDN, $msrc, $types )
-	{
-
-		$fileInfo   = pathinfo( $this->cdnFile( $filename ) );
-		$singlePath = pathinfo( $this->videoFile( $filename, $isCDN ) );
-
-		$multiVideo = [];
-
-		if ( $msrc && $isCDN ) {
-			foreach ( $types as $type => $value ) {
-				$multiVideo += [ $fileInfo['dirname'] . '/' . $fileInfo['filename'] . '.' . $value => $value ];
-//                $multiVideo[] .= $value;
-			}
-		}
-
-
-		if ( $msrc && ! $isCDN ) {
-			foreach ( $types as $type => $value ) {
-				$multiVideo += [ $singlePath['dirname'] . '/' . $singlePath['filename'] . '.' . $value => $value ];
-//                $multiVideo[] .= $value;
-			}
-		}
-
-		return $multiVideo;
-
-	}
 
 	/**
 	 * @param $cfg
@@ -528,7 +454,6 @@ class Html5VideoExtension extends SimpleExtension {
 				'use_cdn'         => false,
 				'attributes'      => [ 'controls' ],
 				'preload'         => 'metadata',
-				'multiple_source' => false,
 			]
 		];
 	}
