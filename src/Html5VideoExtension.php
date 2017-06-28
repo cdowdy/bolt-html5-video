@@ -2,14 +2,10 @@
 
 namespace Bolt\Extension\cdowdy\html5video;
 
-use Bolt\Asset\Snippet\Snippet;
-use Bolt\Asset\Target;
-use Bolt\Controller\Zone;
+use Bolt\Extension\cdowdy\html5video\Handler\CDNHandler;
 use Bolt\Extension\cdowdy\html5video\Handler\HTML5VideoHandler;
 use Bolt\Extension\cdowdy\html5video\Provider\HTML5FieldProvider;
-use Bolt\Extension\cdowdy\html5video\Handler\CDNHandler;
 use Bolt\Extension\SimpleExtension;
-use Bolt\Library as Lib;
 
 /**
  * Html5Video extension class.
@@ -17,8 +13,6 @@ use Bolt\Library as Lib;
  * @author Cory Dowdy <cory@corydowdy.com>
  */
 class Html5VideoExtension extends SimpleExtension {
-
-
 
 
 	/**
@@ -64,7 +58,6 @@ class Html5VideoExtension extends SimpleExtension {
 	public function html5video( $file, $name = 'default', array $options = array() )
 	{
 
-		$app = $this->getContainer();
 		// get the config file name if using one. otherwise its 'default'
 		$configName = $this->getConfigName( $name );
 
@@ -76,25 +69,19 @@ class Html5VideoExtension extends SimpleExtension {
 		 * Merge the options set in either 'default' or named config with the options passed in through the twig template
 		 */
 		$mergedOptions = array_merge( $defaultOptions, $options );
-//        $attributes = $this->combineOptions($configName, $options, 'attributes');
-		$attributes = $this->checkConfig( $mergedOptions, 'attributes', $defaultConfig );
-
+		$attributes    = $this->checkConfig( $mergedOptions, 'attributes', $defaultConfig );
 		$poster        = $mergedOptions['video_poster'];
 		$isCDN         = $mergedOptions['use_cdn'];
 		$preload       = $mergedOptions['preload'];
 		$widthHeight   = $this->checkIndex( $mergedOptions, 'width_height', null );
 		$mediaFragment = $mergedOptions['media_fragment'];
 
-
-		$videoID        = $mergedOptions['video_id'];
-
+		$videoID = $mergedOptions['video_id'];
 		// get tracks if present
 		$tracks = $mergedOptions['tracks'];
-
 		// class passed through the twig template
 		$templateClass = $this->checkIndex( $options, 'class', null );
 		// classes in the config
-//        $classes = $defaultOptions['class'];
 		$classes = $this->checkIndex( $defaultOptions, 'class', null );
 
 		if ( $templateClass && $classes ) {
@@ -105,22 +92,20 @@ class Html5VideoExtension extends SimpleExtension {
 			$htmlClass = $classes;
 		}
 
-
-
-		$videoSources = $this->createVideoSrcArray($file, $isCDN, $configName);
+		$videoSources = $this->createVideoSrcArray( $file, $isCDN, $configName );
 
 
 		$context = [
 			'videoSources' => $videoSources,
-			'poster'      => $poster,
-			'preload'     => $preload,
-			'widthHeight' => $widthHeight,
-			'attributes'  => $attributes,
-			'class'       => $htmlClass,
-			'video_id'    => $videoID,
-			'is_cdn'      => $isCDN,
-			'tracks'      => $tracks,
-			'fragment'    => $mediaFragment
+			'poster'       => $poster,
+			'preload'      => $preload,
+			'widthHeight'  => $widthHeight,
+			'attributes'   => $attributes,
+			'class'        => $htmlClass,
+			'video_id'     => $videoID,
+			'is_cdn'       => $isCDN,
+			'tracks'       => $tracks,
+			'fragment'     => $mediaFragment
 		];
 
 		return $this->renderTemplate( 'video.twig', $context );
@@ -211,15 +196,8 @@ class Html5VideoExtension extends SimpleExtension {
 		$configName    = $this->getConfigName( $config );
 		$defaultConfig = $this->getDefaultConfig();
 
-//        $cdn = isset($cfg[$configName ]['use_cdn']) ;
 		$cdn = $this->checkConfig( $cfg[ $configName ], 'use_cdn', $defaultConfig );
-//        $videoID = $cfg[ $configName ]['video_id'];
 
-
-
-
-
-//        $attributes = $cfg[ $configName ]['attributes'];
 		$attributes  = $this->checkConfig( $cfg[ $configName ], 'attributes', $defaultConfig );
 		$preload     = $this->checkConfig( $cfg[ $configName ], 'preload', $defaultConfig );
 		$widthHeight = $this->checkIndex( $cfg[ $configName ], 'width_height', null );
@@ -232,19 +210,16 @@ class Html5VideoExtension extends SimpleExtension {
 		$class   = $this->getClassID( $configName, 'class' );
 		$videoID = $this->getClassID( $configName, 'video_id' );
 
-
-
 		$defaults = [
-			'use_cdn'         => $cdn,
-			'video_id'        => $videoID,
-			'class'           => $class,
-//            'video_id' => $id,
-			'attributes'      => $attributes,
-			'preload'         => $preload,
-			'width_height'    => $widthHeight,
-			'video_poster'    => $poster,
-			'media_fragment'  => $mediaFragment,
-			'tracks'          => $tracks
+			'use_cdn'        => $cdn,
+			'video_id'       => $videoID,
+			'class'          => $class,
+			'attributes'     => $attributes,
+			'preload'        => $preload,
+			'width_height'   => $widthHeight,
+			'video_poster'   => $poster,
+			'media_fragment' => $mediaFragment,
+			'tracks'         => $tracks
 		];
 
 		return $defaults;
@@ -278,37 +253,39 @@ class Html5VideoExtension extends SimpleExtension {
 	 * array to true.
 	 * Then check to see if the filename is in fact an array. If it's not it came in as a string from a template
 	 * or a contentType editor.
+	 *
 	 * @param $filename
 	 *
 	 * @return array
 	 */
-	protected function createVideoSrcArray( $filename , $useCDN, $config )
+	protected function createVideoSrcArray( $filename, $useCDN, $config )
 	{
-		$app      = $this->getContainer();
-		$configName = $this->getConfigName($config);
-		$cdnHandler = new CDNHandler($this->getConfig(), $configName, $app  );
-		$html5VideoHandler = new HTML5VideoHandler($this->getConfig(), $configName, $app);
-		$normalizeFiles = $html5VideoHandler->endcodeData($filename);
+		$app               = $this->getContainer();
+		$configName        = $this->getConfigName( $config );
+		$cdnHandler        = new CDNHandler( $this->getConfig(), $configName, $app );
+		$html5VideoHandler = new HTML5VideoHandler( $this->getConfig(), $configName, $app );
+		$normalizeFiles    = $html5VideoHandler->endcodeData( $filename );
 
 		$videoFile = [];
 
 		if ( $useCDN ) {
 //			$actualURL = $cdnHandler->checkForActualURL($filename);
 
-			if (is_array($filename)) {
-				$videoFile += $cdnHandler->cdnFile($normalizeFiles) ;
+			if ( is_array( $filename ) ) {
+				$videoFile += $cdnHandler->cdnFile( $normalizeFiles );
+
 				return $videoFile;
 			}
-			return $cdnHandler->cdnFile($filename);
+
+			return $cdnHandler->cdnFile( $filename );
 
 		}
 
-		$videoFile = $html5VideoHandler->videoSources($filename);
+		$videoFile = $html5VideoHandler->videoSources( $filename );
 
 
 		return $videoFile;
 	}
-
 
 
 	/**
@@ -350,13 +327,12 @@ class Html5VideoExtension extends SimpleExtension {
 	{
 		return [
 			'default' => [
-				'use_cdn'         => false,
-				'attributes'      => [ 'controls' ],
-				'preload'         => 'metadata',
+				'use_cdn'    => false,
+				'attributes' => [ 'controls' ],
+				'preload'    => 'metadata',
 			]
 		];
 	}
-
 
 
 }
