@@ -6,6 +6,7 @@ use Bolt\Asset\Snippet\Snippet;
 use Bolt\Asset\Target;
 use Bolt\Controller\Zone;
 use Bolt\Extension\cdowdy\html5video\Provider\HTML5FieldProvider;
+use Bolt\Extension\cdowdy\html5video\Handler\CDNHandler;
 use Bolt\Extension\SimpleExtension;
 use Bolt\Library as Lib;
 
