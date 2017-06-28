@@ -5,6 +5,7 @@ namespace Bolt\Extension\cdowdy\html5video;
 use Bolt\Asset\Snippet\Snippet;
 use Bolt\Asset\Target;
 use Bolt\Controller\Zone;
+use Bolt\Extension\cdowdy\html5video\Handler\HTML5VideoHandler;
 use Bolt\Extension\cdowdy\html5video\Provider\HTML5FieldProvider;
 use Bolt\Extension\cdowdy\html5video\Handler\CDNHandler;
 use Bolt\Extension\SimpleExtension;
@@ -63,7 +64,7 @@ class Html5VideoExtension extends SimpleExtension {
 	public function html5video( $file, $name = 'default', array $options = array() )
 	{
 
-
+		$app = $this->getContainer();
 		// get the config file name if using one. otherwise its 'default'
 		$configName = $this->getConfigName( $name );
 
@@ -105,10 +106,12 @@ class Html5VideoExtension extends SimpleExtension {
 		}
 
 
-		$singleVid  = $this->videoFile( $file, $isCDN );
+
+		$videoSources = $this->createVideoSrcArray($file, $isCDN, $configName);
+
 
 		$context = [
-			'singleSrc'   => $singleVid,
+			'videoSources' => $videoSources,
 			'poster'      => $poster,
 			'preload'     => $preload,
 			'widthHeight' => $widthHeight,
@@ -279,29 +282,33 @@ class Html5VideoExtension extends SimpleExtension {
 	 *
 	 * @return array
 	 */
-	protected function createVideoSrcArray( $filename )
+	protected function createVideoSrcArray( $filename , $useCDN, $config )
 	{
 		$app      = $this->getContainer();
-		$filePath = $app['resources']->getUrl( 'files' );
-		$file     = json_decode( $filename, true );
+		$configName = $this->getConfigName($config);
+		$cdnHandler = new CDNHandler($this->getConfig(), $configName, $app  );
+		$html5VideoHandler = new HTML5VideoHandler($this->getConfig(), $configName, $app);
+		$normalizeFiles = $html5VideoHandler->endcodeData($filename);
 
 		$videoFile = [];
 
-		if ( is_array( $filename ) ) {
+		if ( $useCDN ) {
+//			$actualURL = $cdnHandler->checkForActualURL($filename);
 
-			foreach ( $file as $key => $value ) {
-				$videoFile += [ $key => $filePath . $value['filename'] ];
+			if (is_array($filename)) {
+				$videoFile += $cdnHandler->cdnFile($normalizeFiles) ;
+				return $videoFile;
 			}
+			return $cdnHandler->cdnFile($filename);
 
-		} else {
-			// this is a "string" passed in from the template. It doesn't come from our HTML5 video custom field
-			// Like: {{ html5video( 'sw_crit_fixed.webm', 'default' ) }}
-			$videoFile[] = $filePath . $filename;
 		}
+
+		$videoFile = $html5VideoHandler->videoSources($filename);
 
 
 		return $videoFile;
 	}
+
 
 
 	/**
