@@ -270,40 +270,6 @@ class Html5VideoExtension extends SimpleExtension {
 	}
 
 
-	/**
-	 * @param $url
-	 *
-	 * @return string
-	 *
-	 * see if the url passed as the video URL contains a protocol.
-	 * check the 'cdn_url' config option and see if it has a protocol
-	 * if no protocol is found and the global 'enforce_ssl' config option is set use https://
-	 * if no protocol is found on the cdn url AND enforce_ssl isn't set use http://
-	 * finally
-	 * if the cdn_url option has a protocol use that protocol
-	 */
-
-	public function prefixCDNURL( $url )
-	{
-		$app         = $this->getContainer();
-		$config      = $this->getConfig();
-		$enforceSSL  = $app['config']->get( 'general/enforce_ssl' );
-		$cdnProtocol = parse_url( $config['cdn_url'], PHP_URL_SCHEME );
-
-		if ( ! $cdnProtocol && $enforceSSL ) {
-			$prefix = 'https://';
-		} elseif ( ! $cdnProtocol ) {
-			$prefix = 'http://';
-		} else {
-			$prefix = $cdnProtocol . '://';
-		}
-
-		if ( ! preg_match( "~^(?:f|ht)tps?://~i", $url ) ) {
-			$url = $prefix . $url;
-		}
-
-		return $url;
-	}
 
 	// Get the video URL or relative path.
 	// If its a URL then we'll just pass it along
