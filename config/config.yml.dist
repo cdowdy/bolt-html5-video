@@ -2,25 +2,10 @@
 cdn_url:
 
 
-# options to use if save_data is set to true in either a template or config beneath this.
-# * Message: Displays a Message Telling a Visitor why the video wasn't loaded on initial visit
-# * Message Class: a class to add to the <p> tag containing the message
-# * Button Class: class to add for button styling to match your site
-# * Wrapping div: wraps the <p>Message</p><button>load vid</button> in a div
-# * Wrapping div class: class to style the wrapping div with if you have one
-save_data_options:
-  message: 'The Save Data Header is Present. To Play and Load the Video click the button below.'
-  message_class: [ ]         # class to add to the paragraph tag with the message from above
-  use_poster: true            # use the poster you have defined in your config inplace of a button
-  img_placeholder_class: []  # classes used to style images
-  button_class: [ ]           # class to add to buttons for your sites styles.
-  wrapping_div: false         # true or false. if true a div will contain both the button and paragraph tags from above
-  wrapping_div_class: [ ]    # class for wrapping div if set to true
 
 
 # breakdown of options available to use:
 # * use_cdn: [true | false ] this defaults to false
-# * save_data: true | false check for the save-data client hint header and don't load videos unless the user wants to.
 # * video_id: gives the containing element an ID as a hook for styling :( or JavaScript :)
 # * class: CSS class
 # * attributes: [ 'autoplay', 'controls', 'muted', 'loop', 'playsinline' ] # dont use autplay please :)
@@ -36,7 +21,6 @@ save_data_options:
 # ================================================================================= #
 #default:
 #  use_cdn: true
-#  save_data: true
 #  video_id: blogVideo
 #  class: ['class-one']
 #  attributes: [ 'autoplay', 'controls', 'muted', 'loop' ]
