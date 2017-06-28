@@ -303,34 +303,6 @@ class Html5VideoExtension extends SimpleExtension {
 		return $videoFile;
 	}
 
-	/**
-	 * @param $filename
-	 *
-	 * @return string
-	 */
-	protected function cdnFile( $filename )
-	{
-		$confg = $this->getConfig();
-
-		if ( is_array( $filename ) ) {
-			$filename = isset( $filename['filename'] ) ? $filename['filename'] : $filename['file'];
-		}
-
-//        $useCDN = $options['use_cdn'];
-
-		$cdnURL    = $confg['cdn_url'];
-		$cdnPrefix = $this->prefixCDNURL( $cdnURL );
-
-		if ( $cdnURL ) {
-			$video = $cdnURL . $filename;
-		} else {
-
-			$video = $this->prefixCDNURL( $filename );
-		}
-
-		return $video;
-	}
-
 
 	/**
 	 * @param $cfg
