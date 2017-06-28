@@ -336,22 +336,6 @@ class Html5VideoExtension extends SimpleExtension {
 	}
 
 
-	// since we can pass a CDN URL to our twig function in addition to
-	// the files from either {{ record.videoFile }} or from the files directory.. ie. 'site/files/video.webm'
-	// we'll get the host of the string(filename) if it exists.
-	/**
-	 * @param $string
-	 *
-	 * @return string
-	 */
-	public function getHost( $string )
-	{
-		$url = parse_url( trim( $string ) );
-
-		return trim( $url['host'] ? $url['host'] : array_shift( explode( '/', $url['path'], 2 ) ) );
-	}
-
-
 	/**
 	 * @return array
 	 */
