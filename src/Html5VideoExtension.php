@@ -17,14 +17,7 @@ use Bolt\Library as Lib;
  */
 class Html5VideoExtension extends SimpleExtension {
 
-	/**
-	 * @var string
-	 */
-	private $_currentSD = 'save-data-video.2cd6b5ea.min.js';
-	/**
-	 * @var bool
-	 */
-	private $_scriptAdded = false;
+
 
 
 	/**
@@ -87,7 +80,6 @@ class Html5VideoExtension extends SimpleExtension {
 
 		$poster        = $mergedOptions['video_poster'];
 		$isCDN         = $mergedOptions['use_cdn'];
-		$saveData      = $this->checkIndex( $mergedOptions, 'save_data', false );
 		$preload       = $mergedOptions['preload'];
 		$widthHeight   = $this->checkIndex( $mergedOptions, 'width_height', null );
 		$mediaFragment = $mergedOptions['media_fragment'];
@@ -126,25 +118,15 @@ class Html5VideoExtension extends SimpleExtension {
 
 //        isset($multipleSource) ? $multiVideo : $singleVid;
 
-		$saveDataFile = [];
-		$sdOptions    = [];
 
-		if ( $saveData ) {
-			$saveDataFile = $this->saveDataFile( $file, $isCDN, $multipleSource, $videoTypes, $mediaFragment );
-			$sdOptions    = $this->sdOptions();
-		}
 
 //        $config = $this->getConfig();
 
-		$this->addAssets( $configName, $saveData );
 
 
 		$context = [
 			'singleSrc'   => $singleVid,
 			'poster'      => $poster,
-			'save_data'   => $saveData,
-			'sd_file'     => $saveDataFile,
-			'sdOpt'       => $sdOptions,
 			'preload'     => $preload,
 			'widthHeight' => $widthHeight,
 			'attributes'  => $attributes,
@@ -202,13 +184,6 @@ class Html5VideoExtension extends SimpleExtension {
 	}
 
 
-//
-//    protected function saveDataFileSize($bytes, $decimals = 2)
-//    {
-//        $size = array('B','kB','MB','GB','TB','PB','EB','ZB','YB');
-//        $factor = floor((strlen($bytes) - 1) / 3);
-//        return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . @$size[$factor];
-//    }
 
 	/**
 	 * @param $name
@@ -272,10 +247,10 @@ class Html5VideoExtension extends SimpleExtension {
 //        $cdn = isset($cfg[$configName ]['use_cdn']) ;
 		$cdn = $this->checkConfig( $cfg[ $configName ], 'use_cdn', $defaultConfig );
 //        $videoID = $cfg[ $configName ]['video_id'];
-//        $saveData = $this->checkConfig( $cfg[ $configName ], 'save_data',$defaultConfig) ;
 
 
-		$saveData = $this->checkConfig( $cfg[ $config ], 'save_data', $defaultConfig );
+
+
 
 //        $attributes = $cfg[ $configName ]['attributes'];
 		$attributes  = $this->checkConfig( $cfg[ $configName ], 'attributes', $defaultConfig );
@@ -301,7 +276,6 @@ class Html5VideoExtension extends SimpleExtension {
 //            'video_id' => $id,
 			'multiple_source' => $multiple_source,
 			'video_types'     => $videoTypes,
-			'save_data'       => $saveData,
 			'attributes'      => $attributes,
 			'preload'         => $preload,
 			'width_height'    => $widthHeight,
@@ -313,104 +287,6 @@ class Html5VideoExtension extends SimpleExtension {
 		return $defaults;
 	}
 
-
-	/**
-	 * @param $filename
-	 * @param $isCDN
-	 * @param $msrc
-	 * @param $types
-	 * @param $fragment
-	 *
-	 * @return string
-	 */
-	protected function saveDataFile( $filename, $isCDN, $msrc, $types, $fragment )
-	{
-
-		$fileInfo      = pathinfo( $this->cdnFile( $filename ) );
-		$singlePath    = pathinfo( $this->videoFile( $filename, $isCDN ) );
-		$mediaFragment = '';
-		if ( $fragment ) {
-			$mediaFragment = '#t=' . $this->savedDataFragment( $fragment );
-		}
-
-		$saveDataFile = [];
-
-		if ( $msrc && $isCDN ) {
-			foreach ( $types as $type => $value ) {
-				$saveDataFile += [
-					$fileInfo['dirname'] . '/' . $fileInfo['filename'] . '.' . $value . $mediaFragment => $value
-				];
-			}
-		}
-
-
-		if ( $msrc && ! $isCDN ) {
-			foreach ( $types as $type => $value ) {
-				$saveDataFile += [ $singlePath['dirname'] . '/' . $singlePath['filename'] . '.' . $value . $mediaFragment => $value ];
-			}
-		}
-
-		if ( ! $msrc && $isCDN ) {
-			$saveDataFile = [ $fileInfo['dirname'] . '/' . $fileInfo['basename'] . $mediaFragment => $fileInfo['extension'] ];
-		}
-
-		if ( ! $msrc && ! $isCDN ) {
-			$saveDataFile = [ $singlePath['dirname'] . '/' . $singlePath['basename'] . $mediaFragment => $singlePath['extension'] ];
-		}
-
-		return json_encode( $saveDataFile );
-	}
-
-	/**
-	 * @param $fragment
-	 *
-	 * @return string
-	 */
-	protected function savedDataFragment( $fragment )
-	{
-		$mfrag = [];
-
-		foreach ( $fragment as $key => $value ) {
-			$mfrag[] = $value;
-		}
-
-
-		return implode( ',', $mfrag );
-
-	}
-
-	/**
-	 * @return array
-	 *
-	 * get all the options for the save data option
-	 * a Wrapping div
-	 * Div and Paragraph tags classes
-	 * a custom message
-	 */
-	protected function sdOptions()
-	{
-		$cfg      = $this->getConfig();
-		$sdConfig = $cfg['save_data_options'];
-
-		$message      = $sdConfig['message'];
-		$messageClass = $sdConfig['message_class'];
-		$usePoster    = $sdConfig['use_poster'];
-		$posterClass  = $sdConfig['img_placeholder_class'];
-		$buttonClass  = $sdConfig['button_class'];
-		$wrapDiv      = $sdConfig['wrapping_div'];
-		$divClass     = $sdConfig['wrapping_div_class'];
-
-
-		return $sdOptions = [
-			'message'               => $message,
-			'message_class'         => $messageClass,
-			'use_poster'            => $usePoster,
-			'img_placeholder_class' => $posterClass,
-			'button_class'          => $buttonClass,
-			'wrapping_div'          => $wrapDiv,
-			'wrapping_div_class'    => $divClass
-		];
-	}
 
 	/**
 	 * @param       $config
@@ -641,51 +517,6 @@ class Html5VideoExtension extends SimpleExtension {
 		return trim( $url['host'] ? $url['host'] : array_shift( explode( '/', $url['path'], 2 ) ) );
 	}
 
-	/**
-	 * You can't rely on bolts methods to insert javascript/css in the location you want.
-	 * So we have to hack around it. Use the Snippet Class with their location methods and insert
-	 * Save-Data script into the head. Add a check to make sure the script isn't loaded more than once ($_scriptAdded)
-	 * and stop the insertion of the files multiple times because bolt's registerAssets method will blindly insert
-	 * the files on every page
-	 *
-	 * @param $cfg
-	 */
-	protected function addAssets( $cfg, $saveData )
-	{
-		$app = $this->getContainer();
-
-		$config        = $this->getConfig();
-		$configName    = $this->getConfigName( $cfg );
-		$defaultConfig = $this->getDefaultConfig();
-
-//        $saveData = $this->checkConfig( $config[$configName], 'save_data', $defaultConfig );
-
-		$extPath = $app['resources']->getUrl( 'extensions' );
-
-		$vendor  = 'vendor/cdowdy/';
-		$extName = 'html5video/';
-
-		$saveDataJS     = $extPath . $vendor . $extName . 'js/' . $this->_currentSD;
-		$saveDataScript = <<<SD
-<script src="{$saveDataJS}" async defer></script>
-SD;
-		$asset          = new Snippet();
-		$asset->setCallback( $saveDataScript )
-		      ->setZone( ZONE::FRONTEND )
-		      ->setLocation( Target::AFTER_HEAD_CSS );
-
-		// variable to check if script is added to the page
-
-		if ( $saveData ) {
-			if ( $this->_scriptAdded == false ) {
-				$app['asset.queue.snippet']->add( $asset );
-				$this->_scriptAdded = true;
-			} else {
-
-				$this->_scriptAdded = true;
-			}
-		}
-	}
 
 	/**
 	 * @return array
@@ -695,7 +526,6 @@ SD;
 		return [
 			'default' => [
 				'use_cdn'         => false,
-				'save_data'       => false,
 				'attributes'      => [ 'controls' ],
 				'preload'         => 'metadata',
 				'multiple_source' => false,
