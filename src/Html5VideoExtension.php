@@ -270,36 +270,6 @@ class Html5VideoExtension extends SimpleExtension {
 	}
 
 
-
-	// Get the video URL or relative path.
-	// If its a URL then we'll just pass it along
-	// if it isn't a URL then pass the filename to Bolt's "safefilename" function and attach it to the
-	// filepath of hte site
-	/**
-	 * @param $filename
-	 * @param $cdn
-	 *
-	 * @return string
-	 */
-	public function videoFile( $filename, $cdn )
-	{
-		$app = $this->getContainer();
-		$filePath = $app['resources']->getUrl('files');
-
-		if ( is_array( $filename ) ) {
-			$filename = isset( $filename['filename'] ) ? $filename['filename'] : $filename['file'];
-		}
-
-		if ( $cdn ) {
-			$video = $this->cdnFile( $filename );
-		} else {
-			$video = $filePath . $filename ;
-		}
-
-		return $video;
-	}
-
-
 	/**
 	 * Our custom field gives us a json encoded array. Here we'll decode that and set the bool for associative
 	 * array to true.
