@@ -4,8 +4,6 @@
   "type": "bolt-extension",
   "keywords": [
     "html5 video",
-    "Save-Data Header",
-    "Client Hints",
     "webm",
     "mp4",
     "gif",
@@ -14,7 +12,9 @@
     "mp4 for gifs",
     "ogg",
     "local videos",
-    "cdn hosted videos"
+    "cdn hosted videos",
+    "video",
+    "custom field"
   ],
   "require": {
     "bolt/bolt": "^3.0"
@@ -47,10 +47,12 @@
     "bolt-class": "Bolt\\Extension\\cdowdy\\html5video\\Html5VideoExtension",
     "bolt-icon": "screenshots/html5-videos-icon.png",
     "bolt-screenshots": [
-      "screenshots/contenttypes-config.png",
-      "screenshots/template-usage.png",
-      "screenshots/template-single-output.png",
-      "screenshots/output-code.png"
+      "screenshots/contenttypes-config.v2x.png",
+      "screenshots/custom-field-preview.png",
+      "screenshots/template-usage.v2x.png",
+      "screenshots/output.v2x.png",
+      "screenshots/template-usage-cdn.v2x.png",
+      "screenshots/use_cdn-output.v2x.png"
     ]
   }
 }
