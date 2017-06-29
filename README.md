@@ -51,8 +51,54 @@ htmlcleaner:
   allowed_attributes: [ preload, controls, muted, autoplay, playsinline, loop, poster, type, label, kind, srclang, .. other attributes here  ]
 ``` 
 
-## Set Up
+# Upgrade Guide  
+Using v2.x+ of this extension you'll no longer need to access the index of any `filelist` type. That is if you have in your twig template a piece of code that looks like as follows:  
 
+```twig 
+{# old code that will no longer work #}
+{{ html5video(record.video.0, 'blogVideos' ) }}  
+```  
+
+You can now remove the `.0` part of the twig call for your file. It will now look as follows:  
+
+```twig 
+{{ html5video(record.video, 'blogVideos' ) }}  
+```    
+If you don't remove the `.0` then well... the newest version of this extension wont work :) and you should if you can move to use the custom field type of ``h5video``  
+
+These settings are no longer used and if they are in your templates for over-rides you **MUST** remove them. There is no graceful fallback for these and if they are present the extension will "fail" to output a video and cause your site to display an error.
+
+```yaml
+# Removed Config Options No Longer Used:
+save_data:
+multiple_source:
+video_types:
+```
+
+*as of Bolt 3.2.14(+?) custom fields will give you a flashbag warning*  
+> In the ContentType for 'Entry', the field 'yourFieldName' has 'type: h5video', which is not a proper field type. Please edit contenttypes.yml, and correct this.  
+
+*everything "works" and this should hopefully be fixed eventually. Relevant Bolt issue: https://github.com/bolt/bolt/issues/6782*
+
+
+
+## Set Up  
+
+As of Bolt HTML5 Video v2.x+ there is a custom field you can use in your contentType's. Using this custom field you can upload files and also have a preview after saving. To use this custom field enter in the type `h5video` in your contentType.  
+
+ ```yaml
+# your contenttypes.yml file
+entries:
+  name: Entries
+  singular_name: Entry
+  fields:
+    # other fields here
+    video: # our video field to call in the template
+        type: h5video # the type of field we are using.
+```  
+
+ You can now move on to the other sections of this readme and ignore the following section(s) dealing with `file` and `filelist` field types.
+<!--
 To start off you'll need to have a field in your contenttypes that accepts/uses video. There are two types right off the bat you can use. The``file`` type and/or ``filelist`` type.
 
 **If You Plan To Upload Videos through the 'Edit' Option of the Backend With 'Upload File' You'll Need To Use the ``filelist`` Type**. This is because Bolt's backend will place the video in a directory. This extension assumes each file will be named the same. So an MP4 file will have the same name and file path as a Webm or OGG.
@@ -82,8 +128,9 @@ entries:
     video:
         type: filelist
 ```
+-->
 
-
+### Configuration   
 
 If you're not using the default settings then create a new settings group in the extensions config file.
 
@@ -98,26 +145,21 @@ Then follow the same structure in the *default* settings. Any setting left out o
 ```yaml
 blogVideos:
   use_cdn: false
-  save_data: false
   video_poster: 'path/to/poster.png'
   attributes: [ 'controls', 'muted' ]
   preload: 'metadata'
   width_height: [ 400, 400 ]
-  multiple_source: true
-  video_types: [ 'webm', 'mp4' ]
 ```
 
 Now in your template ( example: record.twig ) place this tag with your named settings group wherever you want a video!
 
 ```twig
 {{ html5video(record.video, 'blogVideos' ) }}
-```
-or for the filelist type:
+```  
 
-```twig
-{{ html5video(record.video.0, 'blogVideos' ) }}
-```
-
+1) ``record`` is the current page being edited/created.
+2) ``video`` is the field we are using to upload/pick our videos - h5video above in our contentType setup
+3) ``blogVideos`` is the custom config group we created above
 
 
 ## Quick Usage With Defaults
@@ -125,18 +167,15 @@ or for the filelist type:
 Placing this twig tag in your template:
 
 ```twig
-{{ html5video(record.video) }}
+{{ html5video(record.video, 'default' ) }}
 ```
 Will use the defaults found in the extensions config file
 
 ```yaml
 default:
   use_cdn: false
-  save_data: false
   attributes: [ 'controls']
   preload: 'metadata'
-  multiple_source: true
-  video_types: [ 'webm', 'mp4' ]
 ```
 
 and produce a video tag in your template.
@@ -159,7 +198,7 @@ cdn_url: https://your-cdn.com/path/to/files/
 Then in your templates where you want the video use the file name:
 
 ```twig
-{{ html5video( 'your-file.webm' ) }}
+{{ html5video( 'your-file.webm', 'yourConfigName' ) }}
 ```
 
 This will produce in the rendered HTML
@@ -167,14 +206,13 @@ This will produce in the rendered HTML
 ```html
 <video controls preload="metadata">
   <source src="https://your-cdn.com/path/to/files/your-file.webm" type="video/webm" >
-  <source src="https://your-cdn.com/path/to/files/your-file.mp4" type="video/mp4" >
 </video>
 ```
 
 The second way to do this is leave the ``cdn_url`` setting empty and place the __full URL__ to your video in the tag:
 
 ```twig
-{{ html5video( 'https://your-cdn.com/path/to/videos/second-cdn-example.webm' ) }}
+{{ html5video( 'https://your-cdn.com/path/to/videos/second-cdn-example.webm', 'yourConfigName' ) }}
 ```
 
 This will produce in the rendered HTML
@@ -182,7 +220,6 @@ This will produce in the rendered HTML
 ```html
 <video controls preload="metadata">
   <source src="https://your-cdn.com/path/to/videos/second-cdn-example.webm" type="video/webm" >
-  <source src="https://your-cdn.com/path/to/videos/second-cdn-example.mp4" type="video/mp4" >
 </video>
 ```  
 
@@ -244,18 +281,17 @@ This will produce in the rendered HTML
 
 ## Controlling Video Sources
 
-When the config has ``multiple_source`` set to *true* as in the default settings this extension will use the file types specified in ``video_types``. Typically these are [MP4 - caniuse.com](http://caniuse.com/#search=mp4) and [WEBM - caniuse.com](http://caniuse.com/#search=webm) types. This will serve two (2) files.
+There are at least two ways to control how many files will be used for the video tags sources. The first one is to upload/pick them them in your contentType through the backend. This works for both the custom field of `h5video` and for the `filelist` type.  
 
-```yaml
-# The config file
-default:
-  use_cdn: false
-  save_data: false
-  attributes: [ 'controls']
-  preload: 'metadata'
-  multiple_source: true
-  video_types: [ 'webm', 'mp4' ]
-```
+The second way to do this is to insert those in your twig templates in an array.   
+
+```twig
+{# Your Twig Template ie. 'record.twig` #}
+{{ html5video(['your-video.mp4', 'your-video.webm'], 'default' ) }}
+```  
+See [Bolt HTML5 Videos Demo](https://corydowdy.com/demo/bolt-html5-videos) for another example on using multiple videos in a twig template.
+
+This will produce a video tag similar to this:  
 
 ```html
 <video controls preload="metadata">
@@ -264,28 +300,37 @@ default:
 </video>
 ```
 
-If you would prefer to only serve one (1) file set ``multiple_source`` to false and then pass either a CDN url or the video attached to the record you want. The file that will be served is whatever you pass in the template or the one you've uploaded to files or your record.
+Multiple Files with your own CDN:
 
-One File with a record's video:
+Either have your cdn URL set in the config under `cdn_url`
 
-```twig
-{# Your Twig Template ie. 'record.twig` #}
-{{ html5video(record.video ) }}
-```
-```html
-<!-- The Rendered HTML in your page -->
-<video controls preload="metadata" src="/files/your-video.mp4"></video>
-```
-
-One file with your own CDN:
+```yaml 
+# app/config/extensions/html5video.cdowdy.yml file
+cdn_url: 'https://your-cdn.com/videos/` 
+```  
+and then put the filename of your video(s) in your template.  
 
 ```twig
 {# Your Twig Template ie. 'record.twig` #}
-{{ html5video('https://your-cdn.com/videos/your-video.webm') }}
+{{ html5video( ['your-video.webm', 'your-video.mp4'], 'default' ) }}
+```  
+
+If you don't set your CDN URL you can supply the **FULL URL** to your videos in your template.
+  
+```twig 
+{# Your Twig Template ie. 'record.twig` #} 
+{# a single video from your CDN #}  
+{{ html5video('https://your-cdn.com/videos/your-video.webm', 'default' ) }}
+
+{# multiple videos from your CDN #}
+{{ html5video(['https://your-cdn.com/videos/your-video.webm', 'https://your-cdn.com/videos/your-video.mp4'], 'default' ) }}
 ```
 ```html
-<!-- The Rendered HTML in your page -->
-<video controls preload="metadata" src="https://your-cdn.com/videos/your-video.webm"></video>
+<!-- The Rendered HTML in your page for multiple Videos -->
+<video controls preload="metadata">
+  <source src="https://your-cdn.com/videos/your-video.webm" type="video/webm" >
+  <source src="https://your-cdn.com/videos/your-video.webm" type="video/mp4" >
+</video>
 ```
 
 
@@ -418,56 +463,10 @@ For multiple over-rides I would suggest placing them on a new line like so:
 }}
 ```  
 
-## Save Data Option and Client Hints  
-
-With the ``save_data: true`` option set in the Extensions config there will be a check for the Client-Hint header of 'Save-Data: On'.  
-Currently these browsers will advertise this header:  
-
-* Chrome
-* Opera 
-* Yandex  
-
-For more information on how a user can enable data-saving in Chrome for Android or iOS, or through desktop Chrome see [Reduce Data Usage in Chrome](https://developer.chrome.com/multidevice/data-compression)
-
-With this option set a message and a button will be rendered instead of downloading and rendering the video. You can control the message that is delivered to the user, CSS styles for both the message, poster-image placeholder and/or button.  
- 
-```yaml  
-save_data_options:  
-  message: 'The Save Data Header is Present. To Play and Load the Video click the image or button below.'
-  message_class: [ 'your-paragraph', 'classes' ]  
-  use_poster: true
-  img_placeholder_class: []
-  button_class: [ 'button' , 'primary' ]
-  wrapping_div: true
-  wrapping_div_class: [ 'class', 'that-wraps', 'the-paragraph-and-button' ]  
-```  
-
-With these set here is how it will look instead of a video.  
-
-```html  
-<div class="class that-wraps the-paragraph-and-button">  
-  <p class="your-paragraph classes">
-   The Save Data Header is Present. To Play and Load the Video click the button below.
-  </p>  
-  <!-- if using a poster placeholder an image will be used -->
-  <img src="poster-img.png" 
-        class=" whatever classes are in img_placeholder_class" 
-        alt="click to load video"
-        width="video-width"
-        height="video-height" 
-        <!-- video data here --> />
-  <!-- if no poster a button will be used -->
-  <button class="button primary"  
-        <!-- video data here --> >Load Video</button>  
-</div>        
-```  
-Here is how it would look on the page and clicking through the buttons.  
-
-![Save Data Enabled and Clicking load video button to load the video](https://raw.githubusercontent.com/cdowdy/bolt-html5-video/master/screenshots/save-data-enabled-placehold.gif)
-
 ## Uploading Video Files
 
-**Uploading through Bolt's Admin backend**:
+**Uploading through Bolt's Admin backend**:  
+**Only relevant if you're using the `file` or `filelist` field types.**
 
 1). Under the ``Settings`` navigation area click ``File Management > Uploaded Files ``
 
@@ -504,7 +503,7 @@ entries:
 4). In your template you can now use:
 
 ```twig
-{{ html5video( record.videolist.0 ) }}
+{{ html5video( record.videolist ) }}
 ```
 
 ## Using Both file and filelist types:
@@ -523,11 +522,10 @@ entries:
       type: filelist
 ```
 
-Then in your template use an ``if/else`` statement similar to the one below:
 
 ```twig
 {% if record.videolist %}
-  {{ html5video( record.videolist.0, 'blogVideos') }}
+  {{ html5video( record.videolist, 'blogVideos') }}
 {% endif %}
 {% if record.video %}
   {{ html5video( record.video, 'blogVideos' ) }}
@@ -535,44 +533,18 @@ Then in your template use an ``if/else`` statement similar to the one below:
 
 {# of you could use one like this #}
 {% if record.videolist %}
-  {{ html5video( record.videolist.0, 'blogVideos') }}
+  {{ html5video( record.videolist, 'blogVideos') }}
 {% else %}
   {{ html5video( record.video, 'blogVideos' ) }}
 {% endif %}
 ```
 
 
-
-<!--## Config Settings:-->
-
-<!--__cdn_url__:-->
-<!--set CDN url if its set and the config option of "use_cdn" is true then use this path for the video.-->
-<!--example:-->
-
-<!--```yaml-->
-<!--cdn_url: 'https://awesome-cdn.com/path/to/videos/'-->
-<!--```-->
-
-<!--__use_cdn__:-->
-<!--If you want to use a CDN. Defaults to false - or no you don't want to.-->
-
-<!--```yaml-->
-<!--use_cdn:  [true | false ]-->
-<!--```-->
-
-<!--If the above two are set then you can use just the filename in your templates to get the full path to the video. If there is no ``cdn_url`` set and ``use_cdn`` is true then you need to put the full url in your template.-->
-<!--EX:-->
-
-<!--```twig-->
-<!--{{ html5video( 'https://your-cdn.com/path/to/videos/example.webm' ) }}-->
-<!--```-->
-
 ## Gotchas and FYI'S
 
-1. The video files should be the same name. When using multiple sources the filename will be appended with the types you provide in ``video_types``
-2. If uploading through the contenttypes record edit/creation page you should use the filelist type instead of the file type  
+1. If your using version 1.x and uploading through the contenttypes record edit/creation page you should use the filelist type instead of the file type  
 
-3. If you get a Console Error of ``Resource interpreted as TextTrack but transferred with MIME type text/plain:`` when including text tracks (vtt files) you need to add the correct mime type for your server:  
+2. If you get a Console Error of ``Resource interpreted as TextTrack but transferred with MIME type text/plain:`` when including text tracks (vtt files) you need to add the correct mime type for your server:  
   * Apache:  
    ```  
    <IfModule mod_mime.c>
@@ -585,6 +557,30 @@ Then in your template use an ``if/else`` statement similar to the one below:
    #others here
        text/vtt                              vtt;
    }  
-   ```  
-   
-4. When using a CDN and if your site is using HTTPS and you have have ``enforce_ssl: true`` in your Bolt main config file then this extension will prefix your CDN url with HTTPS to prevent Mixed Content which most browsers now will block. This may cause issues if your CDN doesn't offer HTTPS or you haven't enabled it through your CDN. If this does cause to many issues please file a bug and I'll think about removing this portion of the extension if the reasons to do so are valid and extensive enough. 
+   ``` 
+3. The Custom Field Type of `h5video` currently throws a warning. As of right now you can dismiss and ignore that. This is a possible bug in bolt. See: https://github.com/bolt/bolt/issues/6782  
+4. If you have set a CDN URL and also have set your named config to use a cdn (``use_cdn: true``) and supply the full URL in your twig templates to the CDN hosted file, you'll get the wrong/malformed URL. Example below:  
+
+```yaml  
+# extensions config
+
+cdn_url: 'https://mycdn.com/` 
+  
+usesCDN:
+  use_cdn: true
+  attributes: [ 'controls']
+  preload: 'metadata' 
+
+```  
+```twig  
+{# your twig template. ie: record.twig #}
+{{ html5video( 'https://mycdn.com/my-file.mp4', 'usesCDN') }}
+```  
+HTML that is produced:  
+```html
+<video controls preload="metadata">
+  <source src="https://mycdn.com/https://mycdn.com/my-file.mp4" type="video/mp4" >  
+</video>
+```  
+
+you'll need to either remove the ``cdn_url:`` or the full URL from the twig template.

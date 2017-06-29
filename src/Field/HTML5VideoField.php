@@ -2,52 +2,82 @@
 
 namespace Bolt\Extension\cdowdy\html5video\Field;
 
-use Bolt\Field\FieldInterface;
+use Bolt\Storage\EntityManager;
+use Bolt\Storage\Field\Type\FieldTypeBase;
+use Bolt\Storage\QuerySet;
 
 /**
  * Custom field type class for use in ContentTypes.
  *
- * @author YCory Dowdy <cory@corydowdy.com>
+ * @author Cory Dowdy <cory@corydowdy.com>
  */
-class HTML5VideoField implements FieldInterface
-{
-    /**
-     * Returns the name of the field.
-     *
-     * @return string The field name
-     */
-    public function getName()
-    {
-        return 'html5video';
-    }
+class HTML5VideoField extends FieldTypeBase {
 
-    /**
-     * Returns the path to the template.
-     *
-     * @return string The template name
-     */
-    public function getTemplate()
-    {
-        return '_video_backend.twig';
-    }
+	/**
+	 * @param QuerySet           $queries
+	 * @param mixed              $entity
+	 * @param EntityManager|null $em
+	 */
+	public function persist( QuerySet $queries, $entity, EntityManager $em = null )
+	{
+		$key   = $this->mapping['fieldname'];
+		$qb    = $queries->getPrimary();
+		$value = $entity->get( $key );
+//		if ( ! $value instanceof Url ) {
+//			$value = Url::fromNative( $value );
+//		}
+		$qb->setValue( $key, ':' . $key );
+		$qb->set( $key, ':' . $key );
+		$qb->setParameter( $key, (string) $value );
+	}
 
-    /**
-     * Returns the storage type.
-     *
-     * @return string A Valid Storage Type
-     */
-    public function getStorageType()
-    {
-        return 'text';
-    }
+	/**
+	 * @param $data
+	 * @param $entity
+	 */
+	public function hydrate( $data, $entity )
+	{
+		$key = $this->mapping['fieldname'];
+		$val = isset( $data[ $key ] ) ? $data[ $key ] : null;
+		if ( $val !== null ) {
+			$this->set( $entity, $val );
+		}
 
-    /**
-     * Returns additional options to be passed to the storage field.
-     *
-     * @return array An array of options
-     */
-    public function getStorageOptions()
-    {
-        return ['default' => ''];
-    }
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getName()
+	{
+		return 'h5video';
+	}
+
+	/**
+	 * json_array is deprecated as of dbal 2.6 http://docs.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/types.html#json-array
+	 * so we'll use json instead!
+	 */
+	public function getStorageType()
+	{
+		return 'json_array';
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getTemplate()
+	{
+		return 'fields/_videolist-field.twig';
+	}
+
+
+	/**
+	 * @return array
+	 */
+	public function getStorageOptions()
+	{
+		return [
+			'default' => ''
+		];
+	}
 }
