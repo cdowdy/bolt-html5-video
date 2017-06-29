@@ -6,7 +6,7 @@ cdn_url:
 
 # breakdown of options available to use:
 # * use_cdn: [true | false ] this defaults to false
-# * video_id: gives the containing element an ID as a hook for styling :( or JavaScript :)
+# * video_id: gives the containing element an ID as a hook for styling :( or JavaScript :) you should set this in your template if you plan to use this config group multiple times.
 # * class: CSS class
 # * attributes: [ 'autoplay', 'controls', 'muted', 'loop', 'playsinline' ] # dont use autplay please :)
 # * preload: 'metadata' # options are metadata | auto | none
