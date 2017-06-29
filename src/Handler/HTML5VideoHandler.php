@@ -76,8 +76,11 @@ class HTML5VideoHandler {
 		if ( is_array( $passedFiles ) ) {
 
 			foreach ( $passedFiles as $key => $value ) {
-				$pathInfo     = pathinfo( $filePath . $value['filename'] );
-				$videoSources += [ $filePath . $value['filename'] => $pathInfo['extension'] ];
+				// files from fields have $value['filename'], from a template using an array or string they don't :)
+				$passedFile = isset( $value['filename'] ) ? $value['filename'] : $value;
+
+				$pathInfo     = pathinfo( $filePath . $passedFile );
+				$videoSources += [ $filePath . $passedFile => $pathInfo['extension'] ];
 			}
 
 		} else {
