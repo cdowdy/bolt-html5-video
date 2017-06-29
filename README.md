@@ -66,6 +66,15 @@ You can now remove the `.0` part of the twig call for your file. It will now loo
 ```    
 If you don't remove the `.0` then well... the newest version of this extension wont work :) and you should if you can move to use the custom field type of ``h5video``  
 
+These settings are no longer used and if they are in your templates for over-rides you **MUST** remove them. There is no graceful fallback for these and if they are present the extension will "fail" to output a video and cause your site to display an error.
+
+```yaml
+# Removed Config Options No Longer Used:
+save_data:
+multiple_source:
+video_types:
+```
+
 *as of Bolt 3.2.14(+?) custom fields will give you a flashbag warning*  
 > In the ContentType for 'Entry', the field 'yourFieldName' has 'type: h5video', which is not a proper field type. Please edit contenttypes.yml, and correct this.  
 
