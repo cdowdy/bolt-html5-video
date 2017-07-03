@@ -14,7 +14,6 @@ Quick Navigation:
 * [Adding Tracks and Subtitles](#adding-tracks-and-subtitles)
 * [Controlling Start and End Times](#controlling-start-and-end-times)
 * [Advanced Usage - over ride settings](#advanced-usage)
-* [Saving Data with Client Hints ](#save-data-option-and-client-hints)
 * [Uploading Video Files](#uploading-video-files)
 * [Using Both ``file`` & ``filelist`` types](#using-both-file-and-filelist-types)
 
