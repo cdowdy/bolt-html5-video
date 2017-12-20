@@ -4,7 +4,6 @@
     extensions:  field.extensions|default([]),
     label:       field.label,
     upload:      field.upload|default(''),
-    can_upload:  field.canUpload,
     info:        field.info|default('info.upload.filelist')
 } %}
 
@@ -17,7 +16,7 @@
 
 
 
-{% set can_upload = context.can.upload and option.can_upload %}
+{% set can_upload = context.can.upload  %}
 
 {% set attributes = {
     fileupload: {
