@@ -50,9 +50,9 @@
     <div class="item ui-state-default">
         <div class="icon"><i class="fa fa-file-o"></i><span>%EXT_E%</span></div>
         <input type="text" class="title" value="%TITLE_A%">
-        <input type="hidden" class="filename" value="%FILENAME_A%">
+        <input type="hidden" class="filename" value="%FILEPATH_A%">
         <a href="#" class="remove"><i class="fa fa-times"></i></a>
-        <span class="desc">%FILENAME_E%</span>
+        <span class="desc">%FILEPATH_E%</span>
     </div>
 {% endset %}
 {% set template_item = template_item|trim|preg_replace('/>\\s+</', '><') %}
@@ -81,8 +81,8 @@
                     {% for file in list|json_decode %}
                         {{ template_item|replace({
                             '%TITLE_A%':    file.title|e('html_attr'),
-                            '%FILENAME_A%': file.filename|e('html_attr'),
-                            '%FILENAME_E%': file.filename|e('html'),
+                            '%FILEPATH_A%': file.filename|e('html_attr'),
+                            '%FILEPATH_E%': file.filename|e('html'),
                             '%EXT_E%': file.filename|preg_replace('/.+?\.([a-z0-9]+)$/', '$1')|upper|e('html')
                         })|raw }}
                     {% else %}
