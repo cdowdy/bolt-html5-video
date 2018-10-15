@@ -21,7 +21,7 @@
 {% set attributes = {
     fileupload: {
         accept:       option.extensions ? '.' ~ option.extensions|join(',.') : '',
-        data_url:     url('upload', {' handler': option.upload }, true),
+        data_url:     url('upload', { 'handler': option.upload }, true),
         id:           'fileupload-' ~ key,
         multiple:     true,
         name:         'files[]',
@@ -60,6 +60,7 @@
 {#=== FIELDSET =======================================================================================================#}
 
 {% extends '@bolt/_base/_fieldset.twig' %}
+{% import '@bolt/_macro/_macro.twig' as macro %}
 
 {% block fieldset_type 'filelist' %}
 {% block fieldset_widget 'fieldFilelist' %}
