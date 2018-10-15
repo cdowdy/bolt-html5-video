@@ -59,7 +59,7 @@ class HTML5VideoField extends FieldTypeBase {
 	 */
 	public function getStorageType()
 	{
-		return 'json_array';
+		return 'json';
 	}
 
 	/**
