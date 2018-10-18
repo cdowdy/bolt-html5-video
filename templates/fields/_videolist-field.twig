@@ -116,13 +116,14 @@
                 <label>{{ __('general.phrase.preview') }}</label>
                 <div class="content-preview imageholder">
 
-                    <video id="h5Video-{{ name }}" controls
+                    <video id="h5Video-{{ name }}"
+                           controls
                            muted {% if list|json_decode is empty %}
                            poster="{{ attributes.preview.poster}} "{% endif %}
                            width="100%"
                             {% if list|json_decode is not empty %}
                                 {% set decoded = list|json_decode %}
-                                src="{{ app.paths.files }}{{ decoded.0.filename }}"
+                                src="{{ asset( decoded.0.filename, 'files' ) }}"
                             {% endif %}
                             >
 
