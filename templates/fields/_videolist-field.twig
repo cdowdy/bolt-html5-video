@@ -97,8 +97,7 @@
 
                 {# Buttons #}
                 <div class="clearfix">
-                    {{ macro.upload_buttons('file', attributes.fileupload, option.upload, can_upload, true) }}
-
+                    {{ macro.upload_buttons([], attributes.fileupload, option.upload, context.can.upload, true) }}
                 </div>
 
                 {# Data #}
@@ -126,7 +125,6 @@
                                 src="{{ asset( decoded.0.filename, 'files' ) }}"
                             {% endif %}
                             >
-
                     </video>
                 </div>
 
